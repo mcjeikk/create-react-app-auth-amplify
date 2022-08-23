@@ -3,10 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "aws-amplify": "^4.3.14",
-    "@aws-amplify/ui-react": "^1.2.6",
+    "@aws-amplify/ui-react": "^3.4.1",
+    "@fullcalendar/core": "^5.11.2",
+    "@fullcalendar/daygrid": "^5.11.2",
+    "@fullcalendar/interaction": "^5.11.2",
+    "@fullcalendar/list": "^5.11.2",
+    "@fullcalendar/moment": "^5.11.2",
+    "@fullcalendar/react": "^5.11.2",
+    "@fullcalendar/rrule": "^5.11.2",
+    "antd": "^4.22.7",
+    "aws-amplify": "^4.3.32",
+    "fullcalendar": "^5.11.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-icons": "^4.4.0",
+    "react-modal": "^3.15.1",
     "react-scripts": "^5.0.0"
   },
   "resolutions": {

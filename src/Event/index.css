@@ -1,0 +1,225 @@
+.MainContainerEvent {
+    background: rgb(2, 0, 36);
+    background: linear-gradient(180deg, rgba(2, 0, 36, 1) 0%, rgba(247, 247, 247, 100) 0%, rgba(201, 201, 201, 100) 100%);
+    /* width: 10rem; */
+    /* width: 100%; */
+    /* width: auto; */
+    height: auto;
+    min-width: 100%;
+    padding: 0;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    display: grid;
+    /* grid-template-columns: 0.5fr 2fr; */
+    /* justify-items: center; */
+    /* justify-content: center; */
+    gap: 1rem;
+    /* border: 1px solid red */
+}
+
+
+.MainContainerEvent label {
+    justify-self: end;
+    align-self: center;
+    height: auto;
+    text-align: end;
+
+}
+
+.MainContainerEvent div {
+    /* grid-column-start: 1; */
+    /* grid-column-end: 3; */
+    /* padding-right: 1rem; */
+    /* padding-left: 1rem; */
+}
+
+.MainContainerEvent h2 {
+    padding-top: 1.5rem;
+    bottom: 0;
+    justify-self: center;
+    align-self: center;
+    text-align: center;
+    font-weight: 700;
+    /* grid-column-start: 1; */
+    /* grid-column-end: 3; */
+}
+/* .ContainerEvent .ant-collapse-content-box */
+.ContainerEvent, .CollapseCustom .ant-collapse-content-box{
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: 0.7fr 2fr;
+}
+
+.PanelClient{
+    min-width: 100%;
+}
+
+.CollapseCustom {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    border-bottom: 0;
+    border-radius: 2px;
+    min-width: 100%;
+    margin: 0;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    /* display: grid; */
+
+}
+
+.CollapseCustom > .ant-collapse-item > .ant-collapse-header {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    padding: 1.2rem 1.6rem;
+    color: rgba(0, 0, 0, 0.85);
+    line-height: 1.5715;
+    cursor: pointer;
+    transition: all 0.3s, visibility 0s;
+    gap: 1rem;
+    /* border: 1px solid red */
+}
+
+label {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.MainContainerEvent textarea {
+    resize: none;
+    border: none;
+    border-radius: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    width: 22rem;
+    font-size: 1.3rem;
+}
+
+.MainContainerEvent input, .MainContainerEvent select {
+    justify-self: center;
+    align-self: center;
+    height: auto;
+    justify-self: start;
+    width: 22rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    padding-left: 1rem;
+    border-radius: 4rem;
+    border: none;
+    font-size: 1.4rem;
+    background-color: rgb(255, 255, 255);
+    color: rgb(80, 80, 80);
+    /* font-weight: bold; */
+}
+
+.ButtonsAddEventContainer {
+    margin-bottom: 2rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+}
+
+.ButtonsAddEventContainer button {
+    border-radius: 0.8rem;
+    border: none;
+    padding: 0.7rem;
+    width: 12rem;
+    height: 4rem;
+    align-self: center;
+    justify-self: center;
+    font-size: 1.4rem;
+}
+
+.ButtonsEditEventContainer {
+    margin-bottom: 2rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+}
+
+.ButtonsEditEventContainer button {
+    border-radius: 0.8rem;
+    border: none;
+    padding: 0.3rem;
+    width: 9rem;
+    height: 4rem;
+    align-self: center;
+    justify-self: center;
+    font-size: 1.2rem;
+}
+
+.CreateButton {
+    background-color: #3b4edb;
+    color: white;
+    font-weight: 700;
+}
+
+.CancelButton {
+    background-color: #f93324;
+    color: white;
+    font-weight: 700;
+}
+
+.DeleteButton {
+    background-color: #f28500;
+    color: white;
+    font-weight: 700;
+}
+
+.ModalContainerConfirmDelete {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: #f0d9d7;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border: thick double #f93324;
+}
+
+.ModalMessageConfirmation {
+    padding: 1rem;
+    padding-right: 3rem;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    display: grid;
+    grid-template-columns: 0.3fr 1fr;
+    justify-content: center;
+    align-items: center;
+}
+
+.ModalMessageConfirmation p {
+    justify-self: center;
+    align-self: center;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.ModalContainerConfirmDelete button {
+    border-radius: 0.8rem;
+    border: none;
+    padding: 0.3rem;
+    width: 7rem;
+    height: 3rem;
+    align-self: center;
+    justify-self: center;
+    font-size: 1.2rem;
+}
+
+.IconDanger {
+    justify-self: end;
+    font-size: 4rem;
+    color: red;
+}

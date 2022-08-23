@@ -1,0 +1,25 @@
+.Calendar {
+    padding-top: 3rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
+    
+}
+
+.fc-day-today {
+    background: #b9fabe !important;
+    /* background: #fad59d !important; */
+    /* border: none !important; */
+  
+} 
+
+.fc-view-harness {
+    z-index: 0;
+}
+
+.fc-view-harness-passive{
+    z-index: 0;
+}
+
+.fc .fc-button-group > .fc-button:focus, .fc .fc-button-group > .fc-button:active, .fc .fc-button-group > .fc-button.fc-button-active {
+    z-index: 0;
+}
