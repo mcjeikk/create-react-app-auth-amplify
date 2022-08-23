@@ -54,7 +54,7 @@ class CustomCalendar extends Component {
                 // marginRight: "1rem",
                 left: '1rem',
                 right: '1rem',
-                bottom: 'auto',
+                // bottom: 'auto',
                 padding: '0',
                 // marginRight: '-50%',
                 // transform: 'translate(-50%, -50%)',

@@ -5,11 +5,13 @@
     /* width: 100%; */
     /* width: auto; */
     height: auto;
+    
     min-width: 100%;
     padding: 0;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     display: grid;
+    
     /* grid-template-columns: 0.5fr 2fr; */
     /* justify-items: center; */
     /* justify-content: center; */

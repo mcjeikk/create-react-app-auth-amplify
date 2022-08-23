@@ -17,12 +17,21 @@ class CalendappContextProvider extends Component {
         to: '',
         title: '',
         notes: '',
+        //Client
         client: '',
         course: '',
         totalHours: '',
         costHour: '',
         paymentCondition: '',
-
+        //Invoice
+        idInvoice: '',
+        sent: false,
+        paymentDate: '',
+        paid: false,
+        totalInvoice: '',
+        currency: '',
+        pdfInvoice: '',
+        country : ''
     }
 
     // Method to update state
@@ -78,6 +87,40 @@ class CalendappContextProvider extends Component {
         this.setState((prevState) => ({ paymentCondition }))
     }
 
+    // INVOICE ELEMENTS
+
+    setIdInvoice = (idInvoice) => {
+        this.setState((prevState) => ({ idInvoice }))
+    }
+
+    setSent = (sent) => {
+        this.setState((prevState) => ({ sent }))
+    }
+
+    setPaymentDate = (paymentDate) => {
+        this.setState((prevState) => ({ paymentDate }))
+    }
+
+    setPaid = (paid) => {
+        this.setState((prevState) => ({ paid }))
+    }
+
+    setTotalInvoice = (totalInvoice) => {
+        this.setState((prevState) => ({ totalInvoice }))
+    }
+
+    setCurrency = (currency) => {
+        this.setState((prevState) => ({ currency }))
+    }
+
+    setPdfInvoice = (pdfInvoice) => {
+        this.setState((prevState) => ({ pdfInvoice }))
+    }
+
+    setCountry = (country) => {
+        this.setState((prevState) => ({ country }))
+    }
+
     getEvents = async () => {
 
         let headersList = {
@@ -105,8 +148,6 @@ class CalendappContextProvider extends Component {
 
     render() {
 
-
-
         const { children } = this.props
         const { events, showModal, actionEvent, showModalConfirmDelete,
             timezone,
@@ -119,11 +160,21 @@ class CalendappContextProvider extends Component {
             totalHours,
             costHour,
             paymentCondition,
+            idInvoice,
+            sent,
+            paymentDate,
+            paid,
+            totalInvoice,
+            pdfInvoice,
+            currency,
+            country
         } = this.state
         const { getEvents, setShowModal, setActionEvent, setShowModalConfirmDelete,
             setTimezone, setFrom, setTo, setTitle,
             setNotes, setClient, setCourse, setTotalHours,
-            setCostHour, setPaymentCondition
+            setCostHour, setPaymentCondition, setIdInvoice,
+            setSent, setPaymentDate, setPaid, setTotalInvoice,
+            setPdfInvoice, setCurrency, setCountry
         } = this
 
         return (
@@ -141,7 +192,15 @@ class CalendappContextProvider extends Component {
                 course, setCourse,
                 totalHours, setTotalHours,
                 costHour, setCostHour,
-                paymentCondition, setPaymentCondition
+                paymentCondition, setPaymentCondition,
+                idInvoice, setIdInvoice,
+                sent, setSent,
+                paymentDate, setPaymentDate,
+                paid, setPaid,
+                totalInvoice, setTotalInvoice,
+                pdfInvoice, setPdfInvoice,
+                currency, setCurrency,
+                country, setCountry
             }}>
                 {children}
             </CalendappContext.Provider>
