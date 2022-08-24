@@ -225,3 +225,7 @@ label {
     font-size: 4rem;
     color: red;
 }
+
+.EmptyField {
+    border: 1px solid red !important;
+}

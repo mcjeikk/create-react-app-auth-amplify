@@ -4,35 +4,68 @@ import CalendappContext from '../CalendappContext';
 import Modal from 'react-modal';
 import { MdDangerous } from 'react-icons/md'
 import { Collapse } from 'antd';
-
-// import "antd/dist/antd.css";
+import { showNotification } from '../Utils'
 const { Panel } = Collapse;
 
 class AddEvent extends Component {
 
     static contextType = CalendappContext
 
+    componentDidMount() {
+
+        let { event, setEvent, actionEvent, getHoursDates } = this.context
+
+        if (actionEvent === 'create') {
+            this.clearEventForm()
+            event.setTotalHours = getHoursDates(event.from, event.to)
+            setEvent(event)
+
+        } else if (actionEvent === 'edit') {
+
+        }
+
+    }
+
+    fillEventForm() {
+
+        let { event, setEvent } = this.context
+
+
+
+    }
+
+    clearEventForm() {
+
+        let { event, setEvent } = this.context
+
+        event.timezone = ''
+        event.from = ''
+        event.to = ''
+        event.totalHours = ''
+        event.title = ''
+        event.notes = ''
+        event.client = ''
+        event.course = ''
+        event.idInvoice = ''
+        event.country = ''
+        event.currency = ''
+        event.costHour = ''
+        event.totalInvoice = ''
+        event.paymentCondition = ''
+        event.paymentDate = ''
+        event.sent = false
+        event.paid = false
+
+        setEvent(event)
+
+    }
+
     render() {
 
-        let { setShowModal, actionEvent, showModalConfirmDelete, setShowModalConfirmDelete,
-            timezone, setTimezone,
-            from, setFrom,
-            to, setTo,
-            title, setTitle,
-            notes, setNotes,
-            client, setClient,
-            course, setCourse,
-            totalHours, setTotalHours,
-            costHour, setCostHour,
-            paymentCondition, setPaymentCondition,
-            idInvoice, setIdInvoice,
-            sent, setSent,
-            paymentDate, setPaymentDate,
-            paid, setPaid,
-            totalInvoice, setTotalInvoice,
-            pdfInvoice, setPdfInvoice,
-            currency, setCurrency,
-            country, setCountry
+        let { setShowModal, actionEvent,
+            showModalConfirmDelete, setShowModalConfirmDelete,
+            formatDate, getHoursDates,
+            event, setEvent
         } = this.context
 
         const onClickCancel = (event) => {
@@ -51,15 +84,19 @@ class AddEvent extends Component {
         }
 
         const onChangeTimeZone = (event) => {
+            event.timezone = event.target.value
             setTimezone(event.target.value)
+            document.getElementById('timezone').classList.remove("EmptyField");
         }
 
         const onChangeFrom = (event) => {
             setFrom(event.target.value)
+            document.getElementById('from').classList.remove("EmptyField");
         }
 
         const onChangeTo = (event) => {
             setTo(event.target.value)
+            document.getElementById('to').classList.remove("EmptyField");
         }
 
         // eslint-disable-next-line no-extend-native
@@ -71,20 +108,14 @@ class AddEvent extends Component {
 
         const onBlurTo = (event) => {
 
-            let date_from = new Date(from)
-            let date_to = new Date(to)
-
-            let days = Math.floor(Math.abs(date_to.getTime() - date_from.getTime()) / (1000 * 3600 * 24) + 1)
-            let hours = Math.abs(date_from - date_to.addDays(-days + 1)) / 36e5
-
-            setTotalHours(days * hours)
-
-            //The subtraction returns the difference between the two dates in milliseconds. 
-            //36e5 is the scientific notation for 60*60*1000, dividing by which converts the milliseconds difference into hours.
+            let totalHours = getHoursDates(from, to)
+            setTotalHours(totalHours)
+            document.getElementById('total_hours').classList.remove("EmptyField");
         }
 
         const onChangeTitle = (event) => {
             setTitle(event.target.value)
+            document.getElementById('title').classList.remove("EmptyField");
         }
 
         const onChangeNotes = (event) => {
@@ -97,24 +128,27 @@ class AddEvent extends Component {
 
         const onChangeCourse = (event) => {
             setCourse(event.target.value)
+            document.getElementById('course').classList.remove("EmptyField");
         }
 
         const onChangeTotalHours = (event) => {
             setTotalHours(event.target.value)
+            document.getElementById('total_hours').classList.remove("EmptyField");
         }
 
         const onChangeCostHour = (event) => {
             setCostHour(event.target.value)
+            document.getElementById('cost_per_hour').classList.remove("EmptyField");
         }
 
         const onBlurCostHour = (event) => {
-
             setTotalInvoice(costHour * totalHours)
-
+            document.getElementById('total_invoice').classList.remove("EmptyField");
         }
 
         const onChangePaymentCondition = (event) => {
             setPaymentCondition(event.target.value)
+            document.getElementById('payment_condition').classList.remove("EmptyField");
         }
 
         const onChangeIdInvoice = (event) => {
@@ -123,12 +157,12 @@ class AddEvent extends Component {
 
         const onChangeCountry = (event) => {
             setCountry(event.target.value)
+            document.getElementById('country').classList.remove("EmptyField");
         }
 
         const onBlurCountry = (event) => {
-
             setCurrency('USD')
-
+            document.getElementById('currency').classList.remove("EmptyField");
         }
 
         const onChangeSent = (event) => {
@@ -137,20 +171,7 @@ class AddEvent extends Component {
 
         const onChangePaymentDate = (event) => {
             setPaymentDate(event.target.value)
-        }
-
-        function formatDate(date) {
-            let d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
-
-            if (month.length < 2)
-                month = '0' + month;
-            if (day.length < 2)
-                day = '0' + day;
-
-            return [year, month, day].join('-');
+            document.getElementById('payment_date').classList.remove("EmptyField");
         }
 
         const onBlurPaymentCondition = (event) => {
@@ -158,6 +179,8 @@ class AddEvent extends Component {
             console.log(date_to.addDays(30));
             date_to = date_to.addDays(parseInt(paymentCondition))
             setPaymentDate(formatDate(date_to))
+            document.getElementById('payment_date').classList.remove("EmptyField");
+
         }
 
         const onChangePaid = (event) => {
@@ -166,69 +189,153 @@ class AddEvent extends Component {
 
         const onChangeTotalInvoice = (event) => {
             setTotalInvoice(event.target.value)
+            document.getElementById('total_invoice').classList.remove("EmptyField");
         }
 
         const onChangeCurrency = (event) => {
             setCurrency(event.target.value)
+            document.getElementById('currency').classList.remove("EmptyField");
         }
 
-        const onChangePdfInvoice = (event) => {
-            setPdfInvoice(event.target.value)
+        const isValidEvent = () => {
+
+            let validEvent = true
+
+            if (timezone === '') {
+                // showNotification('error', 'Time Zone empty', 4000)
+                document.getElementById('timezone').classList.add("EmptyField");
+                validEvent = false
+            }
+
+            if (from === '' || to === '') {
+                // showNotification('error', 'Dates must not empty', 4000)
+                document.getElementById('from').classList.add("EmptyField");
+                document.getElementById('to').classList.add("EmptyField");
+                validEvent = false
+            }
+            if (title === '') {
+                // showNotification('error', 'Title empty', 4000)
+                document.getElementById('title').classList.add("EmptyField");
+                validEvent = false
+            }
+            if (client !== '') {
+
+                if (course === '') {
+                    // showNotification('error', 'Course Empty', 4000)
+                    document.getElementById('course').classList.add("EmptyField");
+                    validEvent = false
+                }
+
+            }
+
+            if (idInvoice !== '') {
+
+                if (country === '') {
+                    // showNotification('error', 'Country Empty', 4000)
+                    document.getElementById('country').classList.add("EmptyField");
+                    validEvent = false
+                }
+
+                if (currency === '') {
+                    // showNotification('error', 'Currency Empty', 4000)
+                    document.getElementById('currency').classList.add("EmptyField");
+                    validEvent = false
+                }
+
+                if (costHour === '') {
+                    // showNotification('error', 'Cost Per Hour Empty', 4000)
+                    document.getElementById('cost_per_hour').classList.add("EmptyField");
+                    validEvent = false
+                }
+
+                if (totalInvoice === '') {
+                    // showNotification('error', 'Total Invoice Empty', 4000)
+                    document.getElementById('total_invoice').classList.add("EmptyField");
+                    validEvent = false
+                }
+
+                if (paymentCondition === '') {
+                    // showNotification('error', 'Payment Condition Empty', 4000)
+                    document.getElementById('payment_condition').classList.add("EmptyField");
+                    validEvent = false
+                }
+
+                if (paymentDate === 'NaN-NaN-NaN' || paymentDate === '') {
+                    // showNotification('error', 'Payment Date Empty', 4000)
+                    document.getElementById('payment_date').classList.add("EmptyField");
+                    validEvent = false
+                }
+
+            }
+
+            if (!validEvent) {
+                showNotification('error', 'Check invalid fields', 4000)
+            }
+            return validEvent;
         }
+
 
         const onClickCreate = async (event) => {
             event.preventDefault()
 
-            let headersList = {
-                "Accept": "*/*",
-                "Content-Type": "application/json"
-            }
+            if (isValidEvent()) {
 
-            let item = {
-                timezone: timezone,
-                start: from,
-                end: to,
-                total_hours: totalHours,
-                title: title,
-                notes: notes,
-            }
-
-            if (client.length > 0) {
-                item.client = {
-                    name: client,
-                    course: course
+                let headersList = {
+                    "Accept": "*/*",
+                    "Content-Type": "application/json"
                 }
-            }
 
-
-            if (idInvoice.length > 0) {
-                item.invoice = {
-                    idInvoice: idInvoice,
-                    country: country,
-                    currency: currency,
-                    cost_per_hour: costHour,
-                    total_invoice: totalInvoice,
-                    payment_cond_days: paymentCondition,
-                    payment_date: paymentDate,
-                    paid: paid,
-                    sent: sent,
-                    // url_invoice: pdfInvoice
+                let item = {
+                    timezone: timezone,
+                    start: from,
+                    end: to,
+                    total_hours: totalHours,
+                    title: title,
+                    notes: notes,
                 }
+
+                if (client.length > 0) {
+                    item.client = {
+                        name: client,
+                        course: course
+                    }
+                }
+
+
+                if (idInvoice.length > 0) {
+                    item.invoice = {
+                        idInvoice: idInvoice,
+                        country: country,
+                        currency: currency,
+                        cost_per_hour: costHour,
+                        total_invoice: totalInvoice,
+                        payment_cond_days: paymentCondition,
+                        payment_date: paymentDate,
+                        paid: paid,
+                        sent: sent,
+                        // url_invoice: pdfInvoice
+                    }
+                }
+
+                let bodyContent = JSON.stringify(item);
+
+                console.log(item)
+                let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/create_event", {
+                    method: "POST",
+                    body: bodyContent,
+                    headers: headersList
+                });
+
+                let data = await response.json();
+                console.log(data);
+
+                showNotification('success', "asdasd")
+
+                setShowModal(false)
+
             }
 
 
-
-            let bodyContent = JSON.stringify(item);
-
-            console.log(item)
-            let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/create_event", {
-                method: "POST",
-                body: bodyContent,
-                headers: headersList
-            });
-
-            let data = await response.json();
-            console.log(data);
 
         }
 
@@ -250,7 +357,7 @@ class AddEvent extends Component {
 
         return (
 
-            <main className='MainContainerEvent'>
+            <main className='MainContainerEvent' >
 
                 <h2>Add Event</h2>
 
@@ -266,19 +373,19 @@ class AddEvent extends Component {
                     </select>
 
                     <label htmlFor={'start'}>From</label>
-                    <input required={true} name={"start"} type={"datetime-local"} value={from} onChange={onChangeFrom}></input>
+                    <input required={true} id={'from'} name={"start"} type={"datetime-local"} value={from} onChange={onChangeFrom}></input>
 
                     <label htmlFor={'end'}>To</label>
-                    <input required={true} name={"end"} type={"datetime-local"} value={to} onChange={onChangeTo} onBlur={onBlurTo}></input>
+                    <input required={true} id={'to'} name={"end"} type={"datetime-local"} value={to} onChange={onChangeTo} onBlur={onBlurTo}></input>
 
                     <label htmlFor={'total_hours'}>Total Hours</label>
-                    <input required={true} name={"total_hours"} type={"number"} placeholder={"Total Hours"} value={totalHours} onChange={onChangeTotalHours}></input>
+                    <input required={true} id={'total_hours'} name={"total_hours"} type={"number"} placeholder={"Total Hours"} value={totalHours} onChange={onChangeTotalHours}></input>
 
                     <label htmlFor={'title'}>Title</label>
-                    <input name={"title"} type={"text"} required={true} value={title} onChange={onChangeTitle}></input>
+                    <input name={"title"} id={'title'} type={"text"} required={true} value={title} onChange={onChangeTitle}></input>
 
                     <label htmlFor={'notes'} >Notes</label>
-                    <textarea name={"notes"} rows="4" value={notes} onChange={onChangeNotes}></textarea>
+                    <textarea name={"notes"} id={'notes'} rows="4" value={notes} onChange={onChangeNotes}></textarea>
 
                     <Collapse accordion defaultActiveKey={['1']} destroyInactivePanel={true} className={'CollapseCustom'}>
                         <Panel header="Client" key="1">
@@ -286,7 +393,7 @@ class AddEvent extends Component {
                             <input name={"client"} type={"text"} placeholder={"Client"} value={client} onChange={onChangeClient}></input>
 
                             <label htmlFor={'course'}>Course</label>
-                            <input name={"course"} type={"text"} placeholder={"Course"} value={course} onChange={onChangeCourse}></input>
+                            <input name={"course"} id={'course'} type={"text"} placeholder={"Course"} value={course} onChange={onChangeCourse}></input>
 
                         </Panel>
                         <Panel header="Invoice" key="2">
@@ -298,7 +405,7 @@ class AddEvent extends Component {
                             </div>
 
                             <label htmlFor={'country'}>Country</label>
-                            <input name={"country"} type={"text"} placeholder={"Country"} value={country} onChange={onChangeCountry} onBlur={onBlurCountry}></input>
+                            <input name={"country"} id={"country"} type={"text"} placeholder={"Country"} value={country} onChange={onChangeCountry} onBlur={onBlurCountry}></input>
 
 
                             <label htmlFor={'currency'}>Currency</label>
@@ -311,21 +418,16 @@ class AddEvent extends Component {
                             {/* <input name={"currency"} type={"text"} placeholder={"Currency"} value={currency} onChange={onChangeCurrency}></input> */}
 
                             <label htmlFor={'cost_per_hour'}>Cost/Hour</label>
-                            <input name={"cost_per_hour"} type={"number"} placeholder={"Cost Per Hour"} value={costHour} onChange={onChangeCostHour} onBlur={onBlurCostHour}></input>
+                            <input name={"cost_per_hour"} id={"cost_per_hour"} type={"number"} placeholder={"Cost Per Hour"} value={costHour} onChange={onChangeCostHour} onBlur={onBlurCostHour}></input>
 
                             <label htmlFor={'total_invoice'}>Total Invoice</label>
-                            <input name={"total_invoice"} type={"text"} placeholder={"Total"} value={totalInvoice} onChange={onChangeTotalInvoice}></input>
+                            <input name={"total_invoice"} id={"total_invoice"} type={"text"} placeholder={"Total"} value={totalInvoice} onChange={onChangeTotalInvoice}></input>
 
                             <label htmlFor={'payment_condition'}>Payment Condition</label>
-                            <input name={"payment_condition"} type={"number"} placeholder={"Payment Condition in days"} value={paymentCondition} onChange={onChangePaymentCondition} onBlur={onBlurPaymentCondition}></input>
+                            <input name={"payment_condition"} id={"payment_condition"} type={"number"} placeholder={"Payment Condition in days"} value={paymentCondition} onChange={onChangePaymentCondition} onBlur={onBlurPaymentCondition}></input>
 
                             <label htmlFor={'payment_date'}>Payment Date</label>
-                            <input name={"payment_date"} type={"date"} value={paymentDate} onChange={onChangePaymentDate} ></input>
-
-
-                            {/* <label htmlFor={'pdf_invoice'}>PDF</label>
-                            <input name={"pdf_invoice"} type={"text"} placeholder={"Invoice Number"} value={pdfInvoice} onChange={onChangePdfInvoice}></input> */}
-
+                            <input name={"payment_date"} id={"payment_date"} type={"date"} value={paymentDate} onChange={onChangePaymentDate} ></input>
 
                             <label htmlFor={'sent'}>Sent</label>
                             <input name={"sent"} type={"checkbox"} value={sent} onChange={onChangeSent}></input>
@@ -335,9 +437,6 @@ class AddEvent extends Component {
 
                         </Panel>
                     </Collapse>
-
-
-
 
                 </div>
 
@@ -350,13 +449,15 @@ class AddEvent extends Component {
                     </div>
                 )}
 
-                {actionEvent === 'edit' && (
-                    <div className='ButtonsEditEventContainer'>
-                        <button className='CreateButton'>Edit Event</button>
-                        <button className='DeleteButton' onClick={onClickDelete}>Delete Event</button>
-                        <button className='CancelButton' onClick={onClickCancel}>Cancel</button>
-                    </div>
-                )}
+                {
+                    actionEvent === 'edit' && (
+                        <div className='ButtonsEditEventContainer'>
+                            <button className='CreateButton'>Edit Event</button>
+                            <button className='DeleteButton' onClick={onClickDelete}>Delete Event</button>
+                            <button className='CancelButton' onClick={onClickCancel}>Cancel</button>
+                        </div>
+                    )
+                }
 
                 <Modal
                     isOpen={showModalConfirmDelete}
@@ -376,7 +477,10 @@ class AddEvent extends Component {
                 </Modal>
 
 
-            </main>
+
+            </main >
+
+
 
 
         );

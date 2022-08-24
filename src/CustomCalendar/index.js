@@ -7,42 +7,36 @@ import rrulePlugin from '@fullcalendar/rrule'
 import CustomViewCalendarPlugin from '../CustomCalendarView'
 import CalendappContext from '../CalendappContext';
 import Modal from 'react-modal';
-import AddEvent from '../Event';
+import Event from '../Event';
 import './index.css'
-
 
 class CustomCalendar extends Component {
 
     static contextType = CalendappContext
 
-    componentDidMount() {
-        let value = this.context;
-        /* perform a side-effect at mount using the value of UserContext */
-        // console.log(value);
-    }
-
     render() {
 
-        let { events, getEvents, showModal, setShowModal, setActionEvent,
-        } = this.context
+        let { event, events, getEvents, showModal, 
+            setShowModal, setActionEvent, formatDate, 
+            setEvent
+            } = this.context
 
-        let action = null //create, edit
+        console.log(this.context);
 
         const handleDateClick = (props) => {
             setActionEvent('create');
+
+            event.from = formatDate(props.date) + "T" + props.date.getHours() + ":00"
+            event.to = formatDate(props.date) + "T" + (props.date.getHours() + 2) + ":00"
+            setEvent(event)
+            // console.log('handleDateClick' + formatDate(props.date));
             setShowModal(true)
-            // alert(handleDateClick)
-            console.log('handleDateClick' + props);
         }
 
         const handleEventClick = (props) => {
             setActionEvent('edit');
+            console.log(props);
             setShowModal(true)
-            console.log('handleDateClick' + props);
-        }
-
-        const closeModal = (props) => {
-            setShowModal(false)
         }
 
         const customStyles = {
@@ -115,14 +109,17 @@ class CustomCalendar extends Component {
                 //   ]}
                 />
 
+                
 
                 <Modal
                     isOpen={showModal}
                     style={customStyles}
                     ariaHideApp={false}>
-                    <AddEvent />
-
+                    <Event />
+                    
                 </Modal>
+
+                
 
             </div >
 
