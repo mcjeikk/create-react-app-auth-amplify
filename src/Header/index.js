@@ -19,8 +19,6 @@ class Header extends Component {
 
     render() {
 
-        // console.log(this.props.signOut);
-
         return (
 
             <header className='MainHeader'>

@@ -19,37 +19,27 @@ class CalendappContextProvider extends Component {
             totalHours: '',
             title: '',
             notes: '',
-            //Client
-            client: '',
-            course: '',
-            //Invoice
-            idInvoice: '',
-            country: '',
-            currency: '',
-            costHour: '',
-            totalInvoice: '',
-            paymentCondition: '',
-            paymentDate: '',
-            sent: false,
-            paid: false,
-            // pdfInvoice: '',
+            client: {
+                name: '',
+                course: '',
+            },
+            invoice: {
+                idInvoice: '',
+                country: '',
+                currency: '',
+                costHour: '',
+                totalInvoice: '',
+                paymentCondition: '',
+                paymentDate: '',
+                sent: false,
+                paid: false,
+                // pdfInvoice: '',
+            }
         },
 
     }
 
-    formatDate(date) {
-        let d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-        if (month.length < 2)
-            month = '0' + month;
-        if (day.length < 2)
-            day = '0' + day;
-
-        return [year, month, day].join('-');
-    }
+    
 
     getHoursDates(from, to) {
         let date_from = new Date(from)
@@ -87,30 +77,6 @@ class CalendappContextProvider extends Component {
         this.setState((prevState) => ({ actionEvent }))
     }
 
-    getEvents = async () => {
-
-        let headersList = {
-            "Accept": "*/*",
-            "Content-Type": "application/json"
-        }
-
-        let bodyContent = JSON.stringify({
-            "start": "2022-01-01 08:00:00",
-            "end": "2022-12-31 08:00:00"
-        });
-
-        let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/search_event", {
-            method: "POST",
-            body: bodyContent,
-            headers: headersList
-        });
-
-        let data = await response.json();
-
-        this.setEvents(data);
-
-    }
-
     render() {
 
         const { children } = this.props
@@ -118,17 +84,17 @@ class CalendappContextProvider extends Component {
             actionEvent, showModalConfirmDelete } = this.state
         const { setEvent, getEvents, setShowModal,
             setActionEvent, setShowModalConfirmDelete,
-            formatDate, getHoursDates,
+            getHoursDates,setEvents
         } = this
 
         return (
             <CalendappContext.Provider value={{
                 event, setEvent,
-                events, getEvents,
+                events, setEvents,
                 showModal, setShowModal,
                 actionEvent, setActionEvent,
                 showModalConfirmDelete, setShowModalConfirmDelete,
-                formatDate, getHoursDates
+                getHoursDates
             }}>
                 {children}
             </CalendappContext.Provider>

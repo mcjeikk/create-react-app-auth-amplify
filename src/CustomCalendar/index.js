@@ -9,34 +9,74 @@ import CalendappContext from '../CalendappContext';
 import Modal from 'react-modal';
 import Event from '../Event';
 import './index.css'
+import moment from 'moment-timezone';
+import { getEvents, formatDate, changeTZ } from '../Utils'
 
 class CustomCalendar extends Component {
 
     static contextType = CalendappContext
 
+
+
     render() {
 
-        let { event, events, getEvents, showModal, 
-            setShowModal, setActionEvent, formatDate, 
-            setEvent
-            } = this.context
-
-        console.log(this.context);
+        let { event, events, showModal,
+            setShowModal, setActionEvent,
+            setEvent, setEvents
+        } = this.context
 
         const handleDateClick = (props) => {
             setActionEvent('create');
 
-            event.from = formatDate(props.date) + "T" + props.date.getHours() + ":00"
-            event.to = formatDate(props.date) + "T" + (props.date.getHours() + 2) + ":00"
+            let selected_date = formatDate(props.date.setDate(props.date.getDate() + 1))
+
+            event.from = selected_date + "T08:00"
+            event.to = selected_date + "T17:00"
             setEvent(event)
-            // console.log('handleDateClick' + formatDate(props.date));
             setShowModal(true)
         }
 
         const handleEventClick = (props) => {
             setActionEvent('edit');
-            console.log(props);
+            let event = translateEvent(props.event)
+            setEvent(event);
             setShowModal(true)
+        }
+
+        const translateEvent = (_event) => {
+
+            console.log(_event);
+
+            let startDateLocal = changeTZ(_event.start, moment.tz.guess(), _event.extendedProps.timezone)
+            let endDateLocal = changeTZ(_event.end, moment.tz.guess(), _event.extendedProps.timezone)
+
+            console.log(startDateLocal);
+            console.log(endDateLocal);
+
+            return {
+                id: _event.id,
+                timezone: _event.extendedProps.timezone,
+                from: startDateLocal.substring(0, 16), //ex: 2022-08-10T09:00
+                to: endDateLocal.substring(0, 16), //ex: 2022-08-10T09:00
+                totalHours: _event.extendedProps.total_hours,
+                title: _event.title,
+                notes: _event.extendedProps.notes,
+                client: {
+                    name: _event.extendedProps.client ? _event.extendedProps?.client.name : '',
+                    course: _event.extendedProps.client ? _event.extendedProps?.client.course : '',
+                },
+                invoice: {
+                    idInvoice: _event.extendedProps.invoice ? _event.extendedProps.invoice.id_invoice : '',
+                    country: _event.extendedProps.invoice ? _event.extendedProps.invoice.country : '',
+                    currency: _event.extendedProps.invoice ? _event.extendedProps.invoice.currency : '',
+                    costHour: _event.extendedProps.invoice ? _event.extendedProps.invoice.cost_per_hour : '',
+                    totalInvoice: _event.extendedProps.invoice ? _event.extendedProps.invoice.total_invoice : '',
+                    paymentCondition: _event.extendedProps.invoice ? _event.extendedProps.invoice.payment_cond_days : '',
+                    paymentDate: _event.extendedProps.invoice ? _event.extendedProps.invoice.payment_date : '',
+                    sent: _event.extendedProps.invoice ? _event.extendedProps.invoice.sent : false,
+                    paid: _event.extendedProps.invoice ? _event.extendedProps.invoice.paid : false,
+                }
+            }
         }
 
         const customStyles = {
@@ -56,6 +96,17 @@ class CustomCalendar extends Component {
         }
 
 
+        const getEvents_ = async () => {
+
+            let today = new Date()
+
+            let evs = getEvents(formatDate(today.addDays(-365)), formatDate(today.addDays(+365)))
+
+            setEvents(await evs)
+
+        }
+
+
 
         return (
 
@@ -72,8 +123,8 @@ class CustomCalendar extends Component {
                     height={'auto'}
                     handleWindowResize={true}
                     editable={true}
-                    viewDidMount={getEvents}
-                    timeZone={"America/Bogota"}
+                    viewDidMount={getEvents_}
+                    // timeZone={"America/Bogota"}
                     // headerToolbar={{
                     //   start: 'title', // will normally be on the left. if RTL, will be on the right
                     //   center: '',
@@ -109,17 +160,17 @@ class CustomCalendar extends Component {
                 //   ]}
                 />
 
-                
+
 
                 <Modal
                     isOpen={showModal}
                     style={customStyles}
                     ariaHideApp={false}>
                     <Event />
-                    
+
                 </Modal>
 
-                
+
 
             </div >
 
