@@ -25,6 +25,8 @@ class CustomAuthenticator extends Component {
 
     render() {
 
+        
+
         const components = {
 
             Header() {
@@ -55,10 +57,11 @@ class CustomAuthenticator extends Component {
 
             <Authenticator className='Authenticator' components={components} >
                 {({ signOut, user }) => {
+
                     return (
                         <main>
                             <Header signOut={signOut} />
-                            <CustomCalendar />
+                            <CustomCalendar user={user}/>
                         </main>
                     )
                 }

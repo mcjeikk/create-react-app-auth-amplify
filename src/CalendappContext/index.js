@@ -13,6 +13,7 @@ class CalendappContextProvider extends Component {
         actionEvent: null,
         //EVENT FORM
         event: {
+            user : '',
             timezone: '',
             from: '',
             to: '',
@@ -82,7 +83,7 @@ class CalendappContextProvider extends Component {
         const { children } = this.props
         const { event, events, showModal,
             actionEvent, showModalConfirmDelete } = this.state
-        const { setEvent, getEvents, setShowModal,
+        const { setEvent, setShowModal,
             setActionEvent, setShowModalConfirmDelete,
             getHoursDates,setEvents
         } = this

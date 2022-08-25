@@ -23,12 +23,11 @@ class Header extends Component {
 
             <header className='MainHeader'>
 
-                {this.props.signOut && (
+                {/* {this.props.signOut && (
                 <div className='MainMenu'>
                     <TiThMenu />
-                    {/* <TiArrowLeftOutline /> */}
                 </div>
-                )}
+                )} */}
 
                 <img alt="Logo" src={headerLogo} />
 

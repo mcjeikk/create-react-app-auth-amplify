@@ -16,7 +16,12 @@ class CustomCalendar extends Component {
 
     static contextType = CalendappContext
 
+    static user_email = null
 
+    constructor(props) {
+        super(props)
+        this.user_email = props.user.attributes.email
+    }
 
     render() {
 
@@ -25,10 +30,12 @@ class CustomCalendar extends Component {
             setEvent, setEvents
         } = this.context
 
+        
+
         const handleDateClick = (props) => {
             setActionEvent('create');
 
-            let selected_date = formatDate(props.date.setDate(props.date.getDate() + 1))
+            let selected_date = formatDate(props.date.setDate(props.date.getDate()))
 
             event.from = selected_date + "T08:00"
             event.to = selected_date + "T17:00"
@@ -45,16 +52,14 @@ class CustomCalendar extends Component {
 
         const translateEvent = (_event) => {
 
-            console.log(_event);
-
             let startDateLocal = changeTZ(_event.start, moment.tz.guess(), _event.extendedProps.timezone)
             let endDateLocal = changeTZ(_event.end, moment.tz.guess(), _event.extendedProps.timezone)
 
-            console.log(startDateLocal);
-            console.log(endDateLocal);
+            console.log(_event);
 
             return {
                 id: _event.id,
+                user_email: _event.extendedProps.user_email,
                 timezone: _event.extendedProps.timezone,
                 from: startDateLocal.substring(0, 16), //ex: 2022-08-10T09:00
                 to: endDateLocal.substring(0, 16), //ex: 2022-08-10T09:00
@@ -98,9 +103,13 @@ class CustomCalendar extends Component {
 
         const getEvents_ = async () => {
 
+            event.user_email = this.user_email
+            setEvent(event)
+            // console.log(event);
+
             let today = new Date()
 
-            let evs = getEvents(formatDate(today.addDays(-365)), formatDate(today.addDays(+365)))
+            let evs = getEvents(this.user_email, formatDate(today.addDays(-365)), formatDate(today.addDays(+365)))
 
             setEvents(await evs)
 

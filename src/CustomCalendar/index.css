@@ -23,3 +23,13 @@
 .fc .fc-button-group > .fc-button:focus, .fc .fc-button-group > .fc-button:active, .fc .fc-button-group > .fc-button.fc-button-active {
     z-index: 0;
 }
+
+.fc-h-event .fc-event-time {
+    overflow: visible;
+}
+
+.fc-daygrid-event {
+    /* font-size: .85em; */
+    font-size: 1rem;
+    /* font-size: var(--fc-small-font-size, .85em); */
+}

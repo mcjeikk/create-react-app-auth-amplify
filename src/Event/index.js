@@ -304,6 +304,7 @@ class AddEvent extends Component {
         const buildEvent = () => {
 
             let item = {
+                user_email : event.user_email,
                 timezone: event.timezone,
                 start: event.from,
                 end: event.to,
@@ -349,7 +350,7 @@ class AddEvent extends Component {
 
                 await updateEvent(item)
                 setShowModal(false)
-                setEvents(await getEvents())
+                setEvents(await getEvents(item.user_email))
 
             }
 
@@ -367,7 +368,7 @@ class AddEvent extends Component {
             setShowModalConfirmDelete(false)
             setShowModal(false)
             await deleteEvent(event)
-            setEvents(await getEvents())
+            setEvents(await getEvents(event.user_email))
         }
 
 
@@ -382,7 +383,7 @@ class AddEvent extends Component {
 
                 await createEvent(item)
 
-                setEvents(await getEvents())
+                setEvents(await getEvents(item.user_email))
 
             }
 

@@ -112,15 +112,14 @@ export const deleteEvent = async (event) => {
 
 }
 
-export const getEvents = async (dateFrom, dateTo) => {
+export const getEvents = async (user_email, dateFrom=new Date(), dateTo=new Date()) => {
 
-    if (dateFrom === undefined && dateTo === undefined) {
-        let today = new Date()
+    // console.log(typeof dateFrom);
+    // console.log(dateFrom);
 
-        dateFrom = formatDate(today.addDays(-365))
-
-        dateTo = formatDate(today.addDays(+365))
-
+    if (typeof dateFrom === "object"){
+        dateFrom = formatDate(dateFrom.addDays(-365))
+        dateTo = formatDate(dateTo.addDays(+365))
     }
 
     let headersList = {
@@ -129,6 +128,7 @@ export const getEvents = async (dateFrom, dateTo) => {
     }
 
     let bodyContent = JSON.stringify({
+        "user_email": user_email,
         "start": dateFrom + ' 00:00:00',
         "end": dateTo + ' 00:00:00',
         // "start": "2022-01-01 08:00:00",
@@ -147,16 +147,8 @@ export const getEvents = async (dateFrom, dateTo) => {
 
     data.forEach(element => {
 
-        console.log(element);
-
         let startDateLocal = changeTZ(element.start, element.timezone, moment.tz.guess())
         let endDateLocal = changeTZ(element.end, element.timezone, moment.tz.guess())
-
-        console.log(element.start);
-        console.log(startDateLocal);
-
-        console.log(element.end);
-        console.log(endDateLocal);
 
         element.start = startDateLocal.substring(0, 16);
         element.end = endDateLocal.substring(0, 16);
