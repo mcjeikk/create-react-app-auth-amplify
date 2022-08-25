@@ -207,7 +207,7 @@ class AddEvent extends Component {
         }
 
         const onChangeSent = (_event) => {
-            event.invoice.paymentDate = _event.target.checked
+            event.invoice.sent = _event.target.checked
             setEvent(event)
         }
 
@@ -235,7 +235,7 @@ class AddEvent extends Component {
             if (event.title === '') {
 
                 if (event.client.name !== '' && event.client.course) {
-                    event.title = event.client.name + " - " + event.client.course
+                    event.title = event.client.name + "-" + event.client.course
                     setEvent(event)
                 }   else {
                     document.getElementById('title').classList.add("EmptyField");
@@ -301,56 +301,14 @@ class AddEvent extends Component {
         }
 
 
-        const buildEvent = () => {
-
-            let item = {
-                user_email : event.user_email,
-                timezone: event.timezone,
-                start: event.from,
-                end: event.to,
-                total_hours: event.totalHours,
-                title: event.title,
-                notes: event.notes,
-            }
-
-            if (event.id) {
-                item.id = event.id
-            }
-
-            if (event.client.name.length > 0) {
-                item.client = event.client
-            }
-
-            if (event.invoice.idInvoice.length > 0) {
-                item.invoice = {
-                    id_invoice: event.invoice.idInvoice,
-                    country: event.invoice.country,
-                    currency: event.invoice.currency,
-                    cost_per_hour: event.invoice.costHour,
-                    total_invoice: event.invoice.totalInvoice,
-                    payment_cond_days: event.invoice.paymentCondition,
-                    payment_date: event.invoice.paymentDate,
-                    paid: event.invoice.paid,
-                    sent: event.invoice.sent,
-                    // url_invoice: pdfInvoice
-                }
-            }
-
-            return item
-        }
-
         const onClickEdit = async (_event) => {
             _event.preventDefault()
 
             if (isValidEvent()) {
 
-                let item = buildEvent()
-
-                // console.log(item);
-
-                await updateEvent(item)
+                await updateEvent(event)
                 setShowModal(false)
-                setEvents(await getEvents(item.user_email))
+                setEvents(await getEvents(event.user_email))
 
             }
 
@@ -377,13 +335,11 @@ class AddEvent extends Component {
 
             if (isValidEvent()) {
 
-                let item = buildEvent()
-
                 setShowModal(false)
 
-                await createEvent(item)
+                await createEvent(event)
 
-                setEvents(await getEvents(item.user_email))
+                setEvents(await getEvents(event.user_email))
 
             }
 
@@ -481,10 +437,10 @@ class AddEvent extends Component {
                             <input name={"payment_date"} id={"payment_date"} type={"date"} value={event.invoice.paymentDate} onChange={onChangePaymentDate} ></input>
 
                             <label htmlFor={'sent'}>Sent</label>
-                            <input name={"sent"} type={"checkbox"} value={event.invoice.sent} onChange={onChangeSent}></input>
+                            <input name={"sent"} type={"checkbox"} checked={event.invoice.sent} onChange={onChangeSent}></input>
 
                             <label htmlFor={'paid'}>Paid</label>
-                            <input name={"paid"} type={"checkbox"} value={event.invoice.paid} onChange={onChangePaid}></input>
+                            <input name={"paid"} type={"checkbox"} checked={event.invoice.paid} onChange={onChangePaid}></input>
 
                         </Panel>
                     </Collapse>

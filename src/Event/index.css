@@ -75,6 +75,17 @@
 
 }
 
+
+
+.ant-collapse, .ant-collapse-icon-position-start, .CollapseCustom{
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.CollapseCustom .ant-collapse-content{
+    background-color: transparent !important;
+}
+
 .CollapseCustom > .ant-collapse-item > .ant-collapse-header {
     position: relative;
     display: flex;
@@ -86,7 +97,10 @@
     cursor: pointer;
     transition: all 0.3s, visibility 0s;
     gap: 1rem;
-    /* border: 1px solid red */
+}
+
+.CollapseCustom > .ant-collapse-item{
+    border-bottom: transparent !important;
 }
 
 label {

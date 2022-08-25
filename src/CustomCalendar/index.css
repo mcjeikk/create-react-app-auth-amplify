@@ -5,6 +5,10 @@
     
 }
 
+.Calendar a {
+    color: black
+}
+
 .fc-day-today {
     background: #b9fabe !important;
     /* background: #fad59d !important; */

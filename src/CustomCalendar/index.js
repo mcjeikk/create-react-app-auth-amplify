@@ -10,7 +10,9 @@ import Modal from 'react-modal';
 import Event from '../Event';
 import './index.css'
 import moment from 'moment-timezone';
-import { getEvents, formatDate, changeTZ } from '../Utils'
+import { getEvents, formatDate, changeTZ, updateEvent, capitalizeFirstLetter } from '../Utils'
+import TrackingTable from '../TrackingTable'
+
 
 class CustomCalendar extends Component {
 
@@ -21,6 +23,15 @@ class CustomCalendar extends Component {
     constructor(props) {
         super(props)
         this.user_email = props.user.attributes.email
+        this.myRefCalendar = React.createRef();
+    }
+
+    componentDidMount() {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+        });
     }
 
     render() {
@@ -30,7 +41,7 @@ class CustomCalendar extends Component {
             setEvent, setEvents
         } = this.context
 
-        
+
 
         const handleDateClick = (props) => {
             setActionEvent('create');
@@ -54,8 +65,6 @@ class CustomCalendar extends Component {
 
             let startDateLocal = changeTZ(_event.start, moment.tz.guess(), _event.extendedProps.timezone)
             let endDateLocal = changeTZ(_event.end, moment.tz.guess(), _event.extendedProps.timezone)
-
-            console.log(_event);
 
             return {
                 id: _event.id,
@@ -105,41 +114,76 @@ class CustomCalendar extends Component {
 
             event.user_email = this.user_email
             setEvent(event)
-            // console.log(event);
 
             let today = new Date()
 
             let evs = getEvents(this.user_email, formatDate(today.addDays(-365)), formatDate(today.addDays(+365)))
 
+            // console.log(await evs);
+
             setEvents(await evs)
 
         }
 
+        const eventDropMethod = async (props) => {
+            // console.log(props);
+
+            let event = translateEvent(props.event)
+            setEvent(event)
+
+            await updateEvent(event)
+
+            console.log(event);
+
+        }
+
+        const eventContent = (props) => {
+            // console.log(props);
+            return (
+                <div style={{ padding: '0.2rem 0.2rem 0.2rem 0' }}>
+                    <span style={{ marginRight: '0.2rem', fontWeight: 'bold' }}>{props.timeText}</span>
+                    <span style={{}} >{capitalizeFirstLetter(props.event.title)}</span>
+                </div>
+            )
+
+        }
+
+        const buttonCLic = (props) => {
+            
+            let cal = this.myRefCalendar.current.getApi()
+
+            // console.log(cal.next());
+            console.log(cal.gotoDate("2022-06-05"));
+
+        }
 
 
         return (
 
             <div className="Calendar" >
 
+                {/* <button onClick={buttonCLic}>asdasdsad</button> */}
+
                 <FullCalendar
+                    ref={this.myRefCalendar}
                     locale={'en'}
                     fixedWeekCount={false}
                     initialView='dayGridMonth'
-                    // showNonCurrentDates={false}
-                    plugins={[dayGridPlugin, interactionPlugin, listPlugin, CustomViewCalendarPlugin, rrulePlugin]}
+                    eventDrop={eventDropMethod}
+                    eventContent={eventContent}
+                    plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
                     dateClick={handleDateClick}
                     eventClick={handleEventClick}
                     height={'auto'}
                     handleWindowResize={true}
                     editable={true}
                     viewDidMount={getEvents_}
-                    // timeZone={"America/Bogota"}
-                    // headerToolbar={{
-                    //   start: 'title', // will normally be on the left. if RTL, will be on the right
+                    headerToolbar={{
+                      start: 'title', // will normally be on the left. if RTL, will be on the right
                     //   center: '',
-                    //   end: 'today,prev,next,timeGrid' // will normally be on the right. if RTL, will be on the left
-                    // }}
-                    headerToolbar={{ center: 'dayGridMonth,listWeek' }}
+                    //   end: 'today,prev,next' //  will normally be on the right. if RTL, will be on the left
+                    }}
+                    // headerToolbar={{ center: 'dayGridMonth,listWeek' }}
                     events={events}
                     eventDisplay={'block'}
                     eventTimeFormat={ // like '14:30:00'
@@ -149,25 +193,9 @@ class CustomCalendar extends Component {
                             "meridiem": "narrow" //Normally with a 12-hour clock the meridiem displays as A.M./P.M.
                         }
                     }
-                // events={[
-                // { display: 'background',  allDay : true, start: '2022-08-01 05:00:00', end: '2022-08-01 15:00:00', durationEditable: true },
-                // ]}
-                // events={[
-                //     {
-                //       title: 'my recurring event',
-                //       rrule: {
-                //         freq: 'weekly',
-                //         dtstart: '2022-08-22T10:30:00',
-                //         until: '2022-08-31'
-                //       },
-                //       exrule: { // will also accept an array of these objects
-                //         freq: 'weekly',
-                //         dtstart: '2022-08-01T10:30:00',
-                //         until: '2022-08-22'
-                //       }
-                //     }
-                //   ]}
                 />
+
+                <TrackingTable/>
 
 
 

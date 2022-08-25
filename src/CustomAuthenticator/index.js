@@ -23,9 +23,17 @@ class CustomAuthenticator extends Component {
 
     static contextType = CalendappContext
 
+    componentDidMount() {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+        });
+    }
+
     render() {
 
-        
+
 
         const components = {
 
@@ -61,7 +69,7 @@ class CustomAuthenticator extends Component {
                     return (
                         <main>
                             <Header signOut={signOut} />
-                            <CustomCalendar user={user}/>
+                            <CustomCalendar user={user} />
                         </main>
                     )
                 }

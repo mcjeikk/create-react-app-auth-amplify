@@ -29,13 +29,55 @@ Date.prototype.addDays = function (days) {
     return date;
 }
 
+
+const buildEvent = (event) => {
+
+    let item = {
+        user_email : event.user_email,
+        timezone: event.timezone,
+        start: event.from,
+        end: event.to,
+        total_hours: event.totalHours,
+        title: event.title,
+        notes: event.notes,
+    }
+
+    if (event.id) {
+        item.id = event.id
+    }
+
+    if (event.client.name.length > 0) {
+        item.client = event.client
+    }
+
+    if (event.invoice.idInvoice.length > 0) {
+        item.invoice = {
+            id_invoice: event.invoice.idInvoice,
+            country: event.invoice.country,
+            currency: event.invoice.currency,
+            cost_per_hour: event.invoice.costHour,
+            total_invoice: event.invoice.totalInvoice,
+            payment_cond_days: event.invoice.paymentCondition,
+            payment_date: event.invoice.paymentDate,
+            paid: event.invoice.paid,
+            sent: event.invoice.sent,
+            // url_invoice: pdfInvoice
+        }
+    }
+
+    return item
+}
+
+
 export const createEvent = async (event) => {
     let headersList = {
         "Accept": "*/*",
         "Content-Type": "application/json"
     }
 
-    let bodyContent = JSON.stringify(event);
+    let item  = buildEvent(event)
+
+    let bodyContent = JSON.stringify(item);
 
     try {
 
@@ -62,7 +104,9 @@ export const updateEvent = async (event) => {
         "Content-Type": "application/json"
     }
 
-    let bodyContent = JSON.stringify(event);
+    let item  = buildEvent(event)
+
+    let bodyContent = JSON.stringify(item);
 
     let response = null
 
@@ -114,9 +158,6 @@ export const deleteEvent = async (event) => {
 
 export const getEvents = async (user_email, dateFrom=new Date(), dateTo=new Date()) => {
 
-    // console.log(typeof dateFrom);
-    // console.log(dateFrom);
-
     if (typeof dateFrom === "object"){
         dateFrom = formatDate(dateFrom.addDays(-365))
         dateTo = formatDate(dateTo.addDays(+365))
@@ -143,7 +184,7 @@ export const getEvents = async (user_email, dateFrom=new Date(), dateTo=new Date
 
     let data = await response.json();
 
-    
+    let dateToday = new Date()
 
     data.forEach(element => {
 
@@ -152,6 +193,11 @@ export const getEvents = async (user_email, dateFrom=new Date(), dateTo=new Date
 
         element.start = startDateLocal.substring(0, 16);
         element.end = endDateLocal.substring(0, 16);
+
+        if (element.invoice && dateToday > new Date(element.invoice.payment_date)){
+            element.color = '#E74C3C'
+        }
+
 
     });
 
@@ -194,5 +240,11 @@ export const changeTZ = (date, timeZoneFrom, timeZoneTo) => {
     let date_ = moment.tz(date, timeZoneFrom)
 
     return moment.tz(date_, timeZoneTo).format()
+
+}
+
+export const capitalizeFirstLetter = (word) => {
+
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
 
 }

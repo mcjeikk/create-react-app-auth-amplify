@@ -1,0 +1,79 @@
+.PrincipalContainerTableTracking{
+
+}
+
+.PrincipalContainerTableTracking h3{
+
+    text-align: center;
+    font-size: 1.7rem;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    font-weight: bold;
+    color: #f19101;
+
+}
+
+.TableTackingContainer {
+    overflow-y: hidden;
+    margin-top: 2rem;
+    border-radius: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border: none;
+    background-color: transparent;
+    margin-bottom: 1rem;
+}
+
+.TableTackingContainer h3 {
+    background-color: transparent;
+}
+
+.TableTacking table {
+
+    border-collapse: collapse;
+    min-width: 50rem;
+    /* margin: 25px 0; */
+    font-size: 1.2rem;
+    /* min-width: 400px; */
+    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); */
+
+
+}
+
+.TableTacking .ant-table-thead {
+    background: rgb(240, 240, 240);
+}
+
+.TableTacking  .ant-table-column-title{
+    z-index: 0;
+}
+
+.TableTacking thead tr {
+
+    color: #ffffff;
+    text-align: left;
+    font-size: 1.4rem;
+}
+
+.TableTacking th,
+.TableTacking td {
+    padding-top: 1.8rem;
+    padding-bottom: 1.8rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    background: transparent;
+    text-align: center;
+}
+
+.TableTacking tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.TableTacking tbody tr:last-of-type {
+    /* border-bottom: 2px solid #009879; */
+}
+
+.TableTacking tbody tr.active-row {
+    font-weight: bold;
+    /* color: #009879; */
+}
+
