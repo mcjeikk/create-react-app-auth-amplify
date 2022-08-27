@@ -8,6 +8,7 @@ import Header from '../Header';
 import { I18n } from 'aws-amplify';
 
 import CalendappContext from '../CalendappContext'
+import Utils from '../Utils';
 
 I18n.putVocabularies(translations);
 I18n.setLanguage('en');
@@ -24,16 +25,10 @@ class CustomAuthenticator extends Component {
     static contextType = CalendappContext
 
     componentDidMount() {
-        window.scroll({
-            top: 0,
-            left: 0,
-            behavior: 'smooth',
-        });
+        Utils.moveUp()
     }
 
     render() {
-
-
 
         const components = {
 
@@ -67,7 +62,7 @@ class CustomAuthenticator extends Component {
                 {({ signOut, user }) => {
 
                     return (
-                        <main>
+                        <main >
                             <Header signOut={signOut} />
                             <CustomCalendar user={user} />
                         </main>

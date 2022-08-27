@@ -1,13 +1,13 @@
 .PrincipalContainerTableTracking{
-
+    padding-bottom: 10rem;
 }
 
 .PrincipalContainerTableTracking h3{
 
     text-align: center;
-    font-size: 1.7rem;
+    font-size: 2.3rem;
     padding-top: 2rem;
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
     font-weight: bold;
     color: #f19101;
 
@@ -15,7 +15,7 @@
 
 .TableTackingContainer {
     overflow-y: hidden;
-    margin-top: 2rem;
+    margin-top: 1rem;
     border-radius: 1rem;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     border: none;
@@ -35,15 +35,25 @@
     font-size: 1.2rem;
     /* min-width: 400px; */
     /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); */
+}
 
+.TableTacking .ant-table-cell{
+    padding: 1.3rem 1.6rem 1.6rem 1.3rem;
+}
 
+.TableTacking .ant-table-thead > tr > th {
+    background-color: #4e62cf;
+    text-align: center;
+    color: white;
+    font-weight: bold;
 }
 
 .TableTacking .ant-table-thead {
-    background: rgb(240, 240, 240);
+    background: #4e62cf;
 }
 
-.TableTacking  .ant-table-column-title{
+.TableTacking  .ant-table-column-title,
+.ant-table-summary{
     z-index: 0;
 }
 
@@ -77,3 +87,16 @@
     /* color: #009879; */
 }
 
+.ant-table-tbody > .tr.ant-table-row:hover > td, .ant-table-tbody > tr > td.ant-table-cell-row-hover{
+    background: rgb(226, 220, 220) !important;
+}
+
+.MarkInvoice a {
+    color: inherit;
+}
+
+.MarkInvoice {
+    background-color: #f88b8b;
+    color: black;
+    font-weight: bold;
+}

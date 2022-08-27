@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Utils from '../Utils'
 
 const CalendappContext = React.createContext()
 
@@ -11,13 +12,14 @@ class CalendappContextProvider extends Component {
         showModal: false,
         showModalConfirmDelete: false,
         actionEvent: null,
+
         //EVENT FORM
         event: {
             user: '',
             timezone: '',
-            from: '',
-            to: '',
-            totalHours: '',
+            start: '',
+            end: '',
+            total_hours: '',
             title: '',
             notes: '',
             client: {
@@ -25,37 +27,28 @@ class CalendappContextProvider extends Component {
                 course: '',
             },
             invoice: {
-                idInvoice: '',
+                id_invoice: '',
                 country: '',
                 currency: '',
-                costHour: '',
-                totalInvoice: '',
-                paymentCondition: '',
-                paymentDate: '',
+                cost_per_hour: '',
+                total_invoice: '',
+                payment_cond_days: '',
+                payment_date: Utils.formatDate(new Date()),
                 sent: false,
                 paid: false,
                 // pdfInvoice: '',
             }
         },
 
-    }
-
-
-
-    getHoursDates(from, to) {
-        let date_from = new Date(from)
-        let date_to = new Date(to)
-
-        let days = Math.floor(Math.abs(date_to.getTime() - date_from.getTime()) / (1000 * 3600 * 24) + 1)
-        let hours = Math.abs(date_from - date_to.addDays(-days + 1)) / 36e5
-        //The subtraction returns the difference between the two dates in milliseconds. 
-        //36e5 is the scientific notation for 60*60*1000, dividing by which converts the milliseconds difference into hours.
-
-        let totalHours = (days * hours).toFixed(1)
-
-        return (totalHours % 1 === 0) ? Math.round(totalHours) : totalHours
+        autocompleteClients: [],
+        autocompleteCourses: [],
+        autocompleteCountries: []
 
     }
+
+
+
+
 
     // Method to update state
     setEvent = (event) => {
@@ -64,6 +57,18 @@ class CalendappContextProvider extends Component {
 
     setEvents = (events) => {
         this.setState((prevState) => ({ events }))
+    }
+
+    setAutocompleteClients = (autocompleteClients) => {
+        this.setState((prevState) => ({ autocompleteClients }))
+    }
+
+    setAutocompleteCourses = (autocompleteCourses) => {
+        this.setState((prevState) => ({ autocompleteCourses }))
+    }
+
+    setAutocompleteCountries = (autocompleteCountries) => {
+        this.setState((prevState) => ({ autocompleteCountries }))
     }
 
     setShowModal = (showModal) => {
@@ -80,14 +85,19 @@ class CalendappContextProvider extends Component {
 
     render() {
 
-        
-
         const { children } = this.props
         const { event, events, showModal,
-            actionEvent, showModalConfirmDelete } = this.state
+            actionEvent, showModalConfirmDelete,
+            autocompleteClients,
+            autocompleteCourses,
+            autocompleteCountries
+        } = this.state
         const { setEvent, setShowModal,
             setActionEvent, setShowModalConfirmDelete,
-            getHoursDates, setEvents
+            setEvents,
+            setAutocompleteClients,
+            setAutocompleteCourses,
+            setAutocompleteCountries
         } = this
 
         return (
@@ -97,7 +107,10 @@ class CalendappContextProvider extends Component {
                 showModal, setShowModal,
                 actionEvent, setActionEvent,
                 showModalConfirmDelete, setShowModalConfirmDelete,
-                getHoursDates
+                setAutocompleteClients, autocompleteClients,
+                setAutocompleteCourses, autocompleteCourses,
+                setAutocompleteCountries, autocompleteCountries,
+
             }}>
                 {children}
             </CalendappContext.Provider>

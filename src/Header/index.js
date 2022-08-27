@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import './index.css'
 import headerLogo from '../images/calendar_icon.png'
-import { TiThMenu, TiArrowLeftOutline } from "react-icons/ti";
 import CalendappContext from '../CalendappContext'
-import { useAuthenticator } from '@aws-amplify/ui-react';
-
 
 class Header extends Component {
 
@@ -22,12 +19,6 @@ class Header extends Component {
         return (
 
             <header className='MainHeader'>
-
-                {/* {this.props.signOut && (
-                <div className='MainMenu'>
-                    <TiThMenu />
-                </div>
-                )} */}
 
                 <img alt="Logo" src={headerLogo} />
 

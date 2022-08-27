@@ -1,27 +1,35 @@
 :root {
-    --blue-principal : #3b4edb;
+    --blue-principal: #3b4edb;
 }
 
 [data-amplify-authenticator] {
-  --amplify-colors-background-primary: var(--blue-principal);
-  --amplify-colors-background-secondary: var(--blue-principal);
-  --amplify-colors-brand-primary-10: var(--blue-principal);
-  --amplify-colors-brand-primary-80: var(--amplify-colors-teal-40);
-  --amplify-colors-brand-primary-90: var(--amplify-colors-teal-20);
-  --amplify-colors-brand-primary-100: var(--amplify-colors-teal-10); 
-  --amplify-colors-font-interactive: var(--amplify-colors-white);
-  --amplify-components-tabs-item-active-color: var(--blue-principal);
-  --amplify-components-tabs-item-focus-color: var(--blue-principal);
-  --amplify-components-tabs-item-hover-color: var(--blue-principal);
-  --amplify-components-button-primary-background-color: var(--blue-principal);
-  --amplify-components-tabs-item-active-border-color: var(--blue-principal);
-  --amplify-components-button-link-color: var(--blue-principal);
-  --amplify-components-button-primary-active-background-color: var(--blue-principal);
-  --amplify-components-button-primary-focus-background-color: var(--blue-principal);
-  --amplify-components-button-primary-hover-background-color: var(--blue-principal);
+    --amplify-colors-background-primary: var(--blue-principal);
+    --amplify-colors-background-secondary: var(--blue-principal);
+    --amplify-colors-brand-primary-10: var(--blue-principal);
+    --amplify-colors-brand-primary-80: var(--amplify-colors-teal-40);
+    --amplify-colors-brand-primary-90: var(--amplify-colors-teal-20);
+    --amplify-colors-brand-primary-100: var(--amplify-colors-teal-10);
+    --amplify-colors-font-interactive: var(--amplify-colors-white);
+    --amplify-components-tabs-item-active-color: var(--blue-principal);
+    --amplify-components-tabs-item-focus-color: var(--blue-principal);
+    --amplify-components-tabs-item-hover-color: var(--blue-principal);
+    --amplify-components-button-primary-background-color: var(--blue-principal);
+    --amplify-components-tabs-item-active-border-color: var(--blue-principal);
+    --amplify-components-button-link-color: var(--blue-principal);
+    --amplify-components-button-primary-active-background-color: var(--blue-principal);
+    --amplify-components-button-primary-focus-background-color: var(--blue-principal);
+    --amplify-components-button-primary-hover-background-color: var(--blue-principal);
+    --amplify-components-authenticator-container-width-max: 100%;
 }
 
-.UpperHeader ~ div{
+
+[data-amplify-authenticator] [data-amplify-container] {
+    width: 100%;
+    /* padding-right: 20%; */
+    /* padding-left: 20%; */
+}
+
+.UpperHeader~div {
     margin-left: 5rem;
     margin-right: 5rem;
 }
@@ -32,13 +40,13 @@
     /* height: 20rem; */
     padding-left: 5rem;
     padding-right: 5rem;
+    text-align: center;
 }
 
 .HeaderLogin img {
     /* height: 25rem; */
     /* padding-left: 5rem; */
     /* padding-right: 5rem; */
-    /* width: 30rem; */
     /* height: 20rem; */
     /* object-fit: fill; */
     max-width: 100%;
@@ -62,29 +70,47 @@
     font-size: 1.5rem;
 }
 
-.amplify-button{
+.amplify-button {
     font-weight: 700;
     font-size: 1.5rem;
     border-radius: 1.7rem;
 }
 
-.amplify-button .SignInContainer svg{
+.amplify-button .SignInContainer svg {
     display: none;
 }
 
-.amplify-textfield{
+.amplify-textfield {
     border: 1px solid gray;
     border-radius: 1.7rem;
 }
 
-.amplify-textfield input{
+.amplify-textfield input {
     border: 0;
 }
 
-.amplify-textfield button{
+.amplify-textfield button {
     border: 0;
 }
 
-.FooterLogin{
+.FooterLogin {
     text-align: center;
+}
+
+@media (min-width: 500px) {
+
+    [data-amplify-authenticator] [data-amplify-container] {
+        width: 100%;
+        padding-right: 5%;
+        padding-left: 5%;
+    }
+}
+
+@media (min-width: 1000px) {
+
+    [data-amplify-authenticator] [data-amplify-container] {
+        width: 100%;
+        padding-right: 30%;
+        padding-left: 30%;
+    }
 }

@@ -1,23 +1,25 @@
 .MainContainerEvent {
-    background: rgb(2, 0, 36);
-    background: linear-gradient(180deg, rgba(2, 0, 36, 1) 0%, rgba(247, 247, 247, 100) 0%, rgba(201, 201, 201, 100) 100%);
+    background: linear-gradient(180deg, rgba(2, 0, 36, 1) 0%, rgba(247, 247, 245, 100) 0%, rgba(201, 201, 201, 100) 100%);
     /* width: 10rem; */
     /* width: 100%; */
     /* width: auto; */
     height: auto;
-    
+
     min-width: 100%;
     padding: 0;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     display: grid;
-    
+    justify-content: center;
     /* grid-template-columns: 0.5fr 2fr; */
     /* justify-items: center; */
     /* justify-content: center; */
     gap: 1rem;
     /* border: 1px solid red */
+    /* box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset; */
 }
+
+
 
 
 .MainContainerEvent label {
@@ -45,14 +47,17 @@
     /* grid-column-start: 1; */
     /* grid-column-end: 3; */
 }
+
 /* .ContainerEvent .ant-collapse-content-box */
-.ContainerEvent, .CollapseCustom .ant-collapse-content-box{
+.ContainerEvent, .CollapseCustom .ant-collapse-content-box {
     display: grid;
     gap: 1.2rem;
-    grid-template-columns: 0.7fr 2fr;
+    /* grid-template-columns: 0.7fr 2fr; */
+    grid-template-columns: 0.7fr 22rem;
+
 }
 
-.PanelClient{
+.PanelClient {
     min-width: 100%;
 }
 
@@ -77,16 +82,16 @@
 
 
 
-.ant-collapse, .ant-collapse-icon-position-start, .CollapseCustom{
+.ant-collapse, .ant-collapse-icon-position-start, .CollapseCustom {
     background-color: transparent !important;
     border: none !important;
 }
 
-.CollapseCustom .ant-collapse-content{
+.CollapseCustom .ant-collapse-content {
     background-color: transparent !important;
 }
 
-.CollapseCustom > .ant-collapse-item > .ant-collapse-header {
+.CollapseCustom>.ant-collapse-item>.ant-collapse-header {
     position: relative;
     display: flex;
     flex-wrap: nowrap;
@@ -99,7 +104,7 @@
     gap: 1rem;
 }
 
-.CollapseCustom > .ant-collapse-item{
+.CollapseCustom>.ant-collapse-item {
     border-bottom: transparent !important;
 }
 
@@ -118,12 +123,16 @@ label {
     font-size: 1.3rem;
 }
 
-.MainContainerEvent input, .MainContainerEvent select {
+.MainContainerEvent input,
+.MainContainerEvent select,
+.MainContainerEvent .ant-select .ant-select-auto-complete .ant-select-single .ant-select-show-search,
+.MainContainerEvent .ant-select-selector {
     justify-self: center;
     align-self: center;
-    height: auto;
+    /* height: 2.6rem !important; */
     justify-self: start;
-    width: 22rem;
+    /* width: 22rem !important; */
+    width: 100%;
     padding-top: 0.4rem;
     padding-bottom: 0.4rem;
     padding-left: 1rem;
@@ -133,6 +142,25 @@ label {
     background-color: rgb(255, 255, 255);
     color: rgb(80, 80, 80);
     /* font-weight: bold; */
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    /* position: relative; */
+    /* background-color: #fff; */
+    /* border: 1px solid #d9d9d9; */
+    border-radius: 20px !important;
+    /* height: 2.6rem !important;  */
+    /* transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1); */
+}
+
+.ant-input-group-addon {
+    /* left: -4.1rem !important; */
+}
+
+.ant-input-group-addon button {
+    padding: 0.25rem 0.5rem !important;
+    height: auto;
+    /* left: -46px; */
 }
 
 .ButtonsAddEventContainer {
@@ -154,7 +182,11 @@ label {
     align-self: center;
     justify-self: center;
     font-size: 1.4rem;
+    color: white;
+    font-weight: 700;
 }
+
+
 
 .ButtonsEditEventContainer {
     margin-bottom: 2rem;
@@ -164,6 +196,7 @@ label {
     justify-content: center;
     align-items: center;
     padding-top: 1rem;
+
 }
 
 .ButtonsEditEventContainer button {
@@ -175,24 +208,29 @@ label {
     align-self: center;
     justify-self: center;
     font-size: 1.2rem;
+    color: white;
+    font-weight: 700;
 }
 
 .CreateButton {
     background-color: #3b4edb;
-    color: white;
-    font-weight: 700;
 }
 
 .CancelButton {
     background-color: #f93324;
-    color: white;
-    font-weight: 700;
 }
 
 .DeleteButton {
+    grid-column-start: 2;
+    justify-self: center;
+    align-self: center;
+    margin-top: 1rem;
     background-color: #f28500;
-    color: white;
-    font-weight: 700;
+}
+
+.DuplicateButton {
+    background-color: #58D68D;
+
 }
 
 .ModalContainerConfirmDelete {
@@ -261,3 +299,28 @@ label {
     background-color: transparent;
     transform: translateX(0.2rem);
 }
+
+.ModalDeleteConfirmation {
+    position: absolute;
+    background: none;
+    overflow: auto;
+    /* top: 50%; */
+    border: none;
+    /* left: 1rem; */
+    /* right: 1rem; */
+    /* height: 72rem; */
+    /* bottom: 4rem; */
+    padding: 0;
+    border-radius: 4px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+@media (min-width: 600px) {
+
+    .ModalDeleteConfirmation {
+        margin: 0 20% !important;
+    }
+}
+
+
+

@@ -5,7 +5,6 @@ const CustomViewConfig = {
     classNames: ['custom-view'],
 
     content: function (props) {
-        console.log(props);
         let segs = sliceEvents(props, false); // allDay=true
         let html =
             '<div class="view-title">' +

@@ -10,7 +10,6 @@ import CustomAuthenticator from '../CustomAuthenticator'
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer} from 'react-notifications';
 
-
 Amplify.configure(aws_exports);
 
 class AppUI extends Component {

@@ -2,29 +2,123 @@
     padding-top: 3rem;
     padding-right: 2rem;
     padding-left: 2rem;
+
+}
+
+@media (min-width: 600px) {
+
+    .Calendar {
+        padding-top: 3rem;
+        padding-right: 7rem;
+        padding-left: 7rem;
+        transition: all 0.3s, visibility 0s;
+    }
+}
+
+@media (min-width: 750px) {
+
+    .Calendar {
+        padding-top: 3rem;
+        padding-right: 10rem;
+        padding-left: 10rem;
+        transition: all 0.3s, visibility 0s;
     
+    }
+
+    .ClassModalContainer {
+        
+        padding: 0 20% !important;
+        /* box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset; */
+    }
+
+}
+
+@media (min-width: 1000px) {
+
+    .Calendar {
+        padding-top: 3rem;
+        /* padding-right: 30%; */
+        /* padding-left: 30%; */
+        /* margin-left: 20%; */
+        /* margin-right: 20%; */
+        margin: 0 auto;
+        transition: all 0.3s, visibility 0s;
+        
+    }
+
+    .Calendar .fc-scrollgrid-sync-table {
+        height: 50rem !important;
+        /* aspect-ratio: 1 / 0.7 !important; */
+    }
+
+}
+
+@media (min-width: 1400px) {
+
+    .Calendar {
+        padding-top: 3rem;
+        /* padding-right: 30%; */
+        /* padding-left: 30%; */
+        /* margin-left: 20%; */
+        /* margin-right: 20%; */
+        margin: 0 10rem;
+        transition: all 0.3s, visibility 0s;
+        
+    }
+
+    .Calendar .fc-scrollgrid-sync-table {
+        height: 60rem !important;
+        /* aspect-ratio: 1 / 0.7 !important; */
+    }
+
+}
+
+@media (min-width: 2000px) {
+
+    .Calendar {
+        padding-top: 3rem;
+        /* padding-right: 30%; */
+        /* padding-left: 30%; */
+        /* margin-left: 20%; */
+        /* margin-right: 20%; */
+        margin: 0 30rem;
+        transition: all 0.3s, visibility 0s;
+        
+    }
+
+    .Calendar .fc-scrollgrid-sync-table {
+        height: 60rem !important;
+        /* aspect-ratio: 1 / 0.7 !important; */
+    }
+
 }
 
 .Calendar a {
     color: black
 }
 
+.Calendar .fc-col-header {
+    background-color: #E0E0E0;
+}
+
 .fc-day-today {
     background: #b9fabe !important;
     /* background: #fad59d !important; */
     /* border: none !important; */
-  
-} 
+
+}
+
+
 
 .fc-view-harness {
     z-index: 0;
 }
 
-.fc-view-harness-passive{
+.fc-view-harness-passive {
     z-index: 0;
 }
 
-.fc .fc-button-group > .fc-button:focus, .fc .fc-button-group > .fc-button:active, .fc .fc-button-group > .fc-button.fc-button-active {
+.fc .fc-button-group>.fc-button:focus, .fc .fc-button-group>.fc-button:active, .fc .fc-button-group>.fc-button.fc-button-active {
     z-index: 0;
 }
 
@@ -32,8 +126,44 @@
     overflow: visible;
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.fc-daygrid-event::-webkit-scrollbar {
+    display: none;
+}
+
 .fc-daygrid-event {
     /* font-size: .85em; */
     font-size: 1rem;
-    /* font-size: var(--fc-small-font-size, .85em); */
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+
+
+.ReactModal__Body--open {
+    overflow-y: hidden;
+    /* padding: 0 30%; */
+}
+
+/* inset: 2rem 1rem 4rem; */
+/* border-radius: 4px; */
+/* outline: none; */
+/* padding: 0px; */
+
+.ClassModalContainer {
+    position: absolute;
+    background: none;
+    overflow: auto;
+    top: 7rem;
+    border: none;
+    left: 1rem;
+    right: 1rem;
+    /* height: 72rem; */
+    bottom: 4rem;
+    padding: 0;
+    border-radius: 4px;
+    /* box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset; */
 }

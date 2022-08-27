@@ -1,26 +1,7 @@
 
 import { NotificationManager } from 'react-notifications';
-
 import moment from 'moment-timezone';
 
-export const showNotification = (type, text, timeOut = 0) => {
-    switch (type) {
-        case 'info':
-            NotificationManager.info(text);
-            break;
-        case 'success':
-            NotificationManager.success('Success', text);
-            break;
-        case 'warning':
-            NotificationManager.warning('Warning', text, timeOut);
-            break;
-        case 'error':
-            NotificationManager.error(text, 'Error', timeOut);
-            break;
-        default:
-            break;
-    }
-}
 
 // eslint-disable-next-line no-extend-native
 Date.prototype.addDays = function (days) {
@@ -28,223 +9,336 @@ Date.prototype.addDays = function (days) {
     date.setDate(date.getDate() + days);
     return date;
 }
+class Utils {
 
+    static getEvents = async (user_email, dateFrom = new Date(), dateTo = new Date()) => {
 
-const buildEvent = (event) => {
-
-    let item = {
-        user_email : event.user_email,
-        timezone: event.timezone,
-        start: event.from,
-        end: event.to,
-        total_hours: event.totalHours,
-        title: event.title,
-        notes: event.notes,
-    }
-
-    if (event.id) {
-        item.id = event.id
-    }
-
-    if (event.client.name.length > 0) {
-        item.client = event.client
-    }
-
-    if (event.invoice.idInvoice.length > 0) {
-        item.invoice = {
-            id_invoice: event.invoice.idInvoice,
-            country: event.invoice.country,
-            currency: event.invoice.currency,
-            cost_per_hour: event.invoice.costHour,
-            total_invoice: event.invoice.totalInvoice,
-            payment_cond_days: event.invoice.paymentCondition,
-            payment_date: event.invoice.paymentDate,
-            paid: event.invoice.paid,
-            sent: event.invoice.sent,
-            // url_invoice: pdfInvoice
+        if (typeof dateFrom === "object") {
+            dateFrom = this.formatDate(dateFrom.addDays(-365))
+            dateTo = this.formatDate(dateTo.addDays(+365))
         }
-    }
 
-    return item
-}
+        let headersList = {
+            "Accept": "*/*",
+            "Content-Type": "application/json"
+        }
 
+        let bodyContent = JSON.stringify({
+            "user_email": user_email,
+            "start": dateFrom + ' 00:00:00',
+            "end": dateTo + ' 00:00:00',
+            // "start": "2022-01-01 08:00:00",
+            // "end": "2022-12-31 08:00:00"
+        });
 
-export const createEvent = async (event) => {
-    let headersList = {
-        "Accept": "*/*",
-        "Content-Type": "application/json"
-    }
-
-    let item  = buildEvent(event)
-
-    let bodyContent = JSON.stringify(item);
-
-    try {
-
-        let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/create_event", {
+        let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/search_events", {
             method: "POST",
             body: bodyContent,
             headers: headersList
         });
 
-        if (response.status === 200) {
-            response = await response.json()
-            showNotification('success', response.response_text)
+        let data = await response.json();
 
-        }
-    } catch (error) {
-        showNotification('error', 'Failed on service side')
-    }
+        let dateToday = new Date()
 
-}
+        data.forEach(element => {
 
-export const updateEvent = async (event) => {
-    let headersList = {
-        "Accept": "*/*",
-        "Content-Type": "application/json"
-    }
+            let startDateLocal = this.changeTZ(element.start, element.timezone, moment.tz.guess())
+            let endDateLocal = this.changeTZ(element.end, element.timezone, moment.tz.guess())
 
-    let item  = buildEvent(event)
+            element.start = startDateLocal.substring(0, 16);
+            element.end = endDateLocal.substring(0, 16);
 
-    let bodyContent = JSON.stringify(item);
+            if (element.invoice && !element.invoice.paid && dateToday > new Date(element.invoice.payment_date)) {
+                element.color = '#E74C3C'
+            } else if (new Date(element.end) >= dateToday) {
+                //Future events
+                element.color = '#3688D8'
+            } else if (new Date(element.end) < dateToday) {
+                //past event
+                element.color = '#87B0D9'
+            }
 
-    let response = null
-
-    try {
-
-        response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/update_event", {
-            method: "POST",
-            body: bodyContent,
-            headers: headersList
-        })
-
-        if (response.status === 200) {
-            response = await response.json()
-            showNotification('success', response.response_text)
-
-        }
-    } catch (error) {
-        showNotification('error', 'Failed on service side')
-    }
-
-}
-
-export const deleteEvent = async (event) => {
-    let headersList = {
-        "Accept": "*/*",
-        "Content-Type": "application/json"
-    }
-
-    let bodyContent = JSON.stringify(event);
-
-    try {
-
-        let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/delete_event", {
-            method: "DELETE",
-            body: bodyContent,
-            headers: headersList
         });
 
-        if (response.status === 200) {
-            response = await response.json()
-            showNotification('success', response.response_text)
+        return data;
 
+    }
+
+    static showNotification = (type, text, timeOut = 0) => {
+        switch (type) {
+            case 'info':
+                NotificationManager.info(text);
+                break;
+            case 'success':
+                NotificationManager.success('Success', text);
+                break;
+            case 'warning':
+                NotificationManager.warning('Warning', text, timeOut);
+                break;
+            case 'error':
+                NotificationManager.error(text, 'Error', timeOut);
+                break;
+            default:
+                break;
         }
-    } catch (error) {
-        showNotification('error', 'Failed on service side')
     }
 
-}
-
-export const getEvents = async (user_email, dateFrom=new Date(), dateTo=new Date()) => {
-
-    if (typeof dateFrom === "object"){
-        dateFrom = formatDate(dateFrom.addDays(-365))
-        dateTo = formatDate(dateTo.addDays(+365))
-    }
-
-    let headersList = {
-        "Accept": "*/*",
-        "Content-Type": "application/json"
-    }
-
-    let bodyContent = JSON.stringify({
-        "user_email": user_email,
-        "start": dateFrom + ' 00:00:00',
-        "end": dateTo + ' 00:00:00',
-        // "start": "2022-01-01 08:00:00",
-        // "end": "2022-12-31 08:00:00"
-    });
-
-    let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/search_events", {
-        method: "POST",
-        body: bodyContent,
-        headers: headersList
-    });
-
-    let data = await response.json();
-
-    let dateToday = new Date()
-
-    data.forEach(element => {
-
-        let startDateLocal = changeTZ(element.start, element.timezone, moment.tz.guess())
-        let endDateLocal = changeTZ(element.end, element.timezone, moment.tz.guess())
-
-        element.start = startDateLocal.substring(0, 16);
-        element.end = endDateLocal.substring(0, 16);
-
-        if (element.invoice && dateToday > new Date(element.invoice.payment_date)){
-            element.color = '#E74C3C'
+    static createEvent = async (event) => {
+        let headersList = {
+            "Accept": "*/*",
+            "Content-Type": "application/json"
         }
 
+        let item = this.buildEvent(event)
 
-    });
+        let bodyContent = JSON.stringify(item);
 
-    return data;
+        try {
 
-}
+            let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/create_event", {
+                method: "POST",
+                body: bodyContent,
+                headers: headersList
+            });
 
-export const changeTimeZone = (date, timeZone) => {
-    if (typeof date === 'string') {
+            if (response.status === 200) {
+                response = await response.json()
+                this.showNotification('success', response.response_text)
+
+            }
+        } catch (error) {
+            this.showNotification('error', 'Failed on service side')
+        }
+
+    }
+
+    static updateEvent = async (event) => {
+        let headersList = {
+            "Accept": "*/*",
+            "Content-Type": "application/json"
+        }
+
+        let item = this.buildEvent(event)
+
+        let bodyContent = JSON.stringify(item);
+
+        let response = null
+
+        try {
+
+            response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/update_event", {
+                method: "POST",
+                body: bodyContent,
+                headers: headersList
+            })
+
+            if (response.status === 200) {
+                response = await response.json()
+                this.showNotification('success', response.response_text)
+
+            }
+        } catch (error) {
+            this.showNotification('error', 'Failed on service side')
+        }
+
+    }
+
+    static deleteEvent = async (event) => {
+        let headersList = {
+            "Accept": "*/*",
+            "Content-Type": "application/json"
+        }
+
+        let bodyContent = JSON.stringify(event);
+
+        try {
+
+            let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/delete_event", {
+                method: "DELETE",
+                body: bodyContent,
+                headers: headersList
+            });
+
+            if (response.status === 200) {
+                response = await response.json()
+                this.showNotification('success', response.response_text)
+
+            }
+        } catch (error) {
+            this.showNotification('error', 'Failed on service side')
+        }
+
+    }
+
+
+    static changeTimeZone = (date, timeZone) => {
+        if (typeof date === 'string') {
+            return new Date(
+                new Date(date).toLocaleString('en-US', {
+                    timeZone,
+                }),
+            );
+        }
+
         return new Date(
-            new Date(date).toLocaleString('en-US', {
+            date.toLocaleString('en-US', {
                 timeZone,
             }),
         );
     }
 
-    return new Date(
-        date.toLocaleString('en-US', {
-            timeZone,
-        }),
-    );
+    static formatDate = (date) => {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
+    static changeTZ = (date, timeZoneFrom, timeZoneTo) => {
+
+        let date_ = moment.tz(date, timeZoneFrom)
+
+        return moment.tz(date_, timeZoneTo).format()
+
+    }
+
+    static capitalizeFirstLetter = (word) => {
+
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+
+    }
+
+    static moveUp = () => {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+        });
+    }
+
+    static buildEvent = (event) => {
+
+        let item = {
+            user_email: event.user_email,
+            timezone: event.timezone,
+            start: event.start,
+            end: event.end,
+            total_hours: event.total_hours,
+            title: event.title,
+            notes: event.notes,
+        }
+
+        if (event.id) {
+            item.id = event.id
+        }
+
+        if (event.client.name.length > 0) {
+            item.client = event.client
+        }
+
+        if (event.invoice.id_invoice.length > 0) {
+            item.invoice = {
+                id_invoice: event.invoice.id_invoice,
+                country: event.invoice.country,
+                currency: event.invoice.currency,
+                cost_per_hour: event.invoice.cost_per_hour,
+                total_invoice: event.invoice.total_invoice,
+                payment_cond_days: event.invoice.payment_cond_days,
+                payment_date: event.invoice.payment_date,
+                paid: event.invoice.paid,
+                sent: event.invoice.sent,
+                // url_invoice: pdfInvoice
+            }
+        }
+
+        return item
+    }
+
+    static getAutoCompleteClients(events) {
+
+        let clients = events.filter(element => {
+            return element.client && element.client.name
+        }).map(element => element.client.name)
+
+        return [...new Set(clients)].map(element => { return { "value": element } })
+
+    }
+
+    static getAutoCompleteCourses(events) {
+        let courses = events.filter(element => {
+            return element.client && element.client.course
+        }).map(element => element.client.course)
+
+        return [...new Set(courses)].map(element => { return { "value": element } })
+    }
+
+    static getAutoCompleteCountries(events) {
+        let countries = events.filter(element => {
+            return element.invoice && element.invoice.country
+        }).map(element => element.invoice.country)
+
+        return [...new Set(countries)].map(element => { return { "value": element } })
+    }
+
+    static getHoursDates(from, to) {
+        let date_from = new Date(from)
+        let date_to = new Date(to)
+
+        let days = Math.floor(Math.abs(date_to.getTime() - date_from.getTime()) / (1000 * 3600 * 24) + 1)
+        let hours = Math.abs(date_from - date_to.addDays(-days + 1)) / 36e5
+        //The subtraction returns the difference between the two dates in milliseconds. 
+        //36e5 is the scientific notation for 60*60*1000, dividing by which converts the milliseconds difference into hours.
+
+        let total_hours = (days * hours).toFixed(1)
+
+        return (total_hours % 1 === 0) ? Math.round(total_hours) : total_hours
+
+    }
+
+    static formatUSD = (number) => {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number)
+    }
+
+    static translateEvent = (_event) => {
+
+        let startDateLocal = Utils.changeTZ(_event.start, moment.tz.guess(), _event.extendedProps.timezone)
+        let endDateLocal = Utils.changeTZ(_event.end, moment.tz.guess(), _event.extendedProps.timezone)
+
+        return {
+            id: _event.id,
+            user_email: _event.extendedProps.user_email,
+            timezone: _event.extendedProps.timezone,
+            start: startDateLocal.substring(0, 16), //ex: 2022-08-10T09:00
+            end: endDateLocal.substring(0, 16), //ex: 2022-08-10T09:00
+            total_hours: _event.extendedProps.total_hours,
+            title: _event.title,
+            notes: _event.extendedProps.notes,
+            client: {
+                name: _event.extendedProps.client ? _event.extendedProps?.client.name : '',
+                course: _event.extendedProps.client ? _event.extendedProps?.client.course : '',
+            },
+            invoice: {
+                id_invoice: _event.extendedProps.invoice ? _event.extendedProps.invoice.id_invoice : '',
+                country: _event.extendedProps.invoice ? _event.extendedProps.invoice.country : '',
+                currency: _event.extendedProps.invoice ? _event.extendedProps.invoice.currency : '',
+                cost_per_hour: _event.extendedProps.invoice ? _event.extendedProps.invoice.cost_per_hour : '',
+                total_invoice: _event.extendedProps.invoice ? _event.extendedProps.invoice.total_invoice : '',
+                payment_cond_days: _event.extendedProps.invoice ? _event.extendedProps.invoice.payment_cond_days : '',
+                payment_date: _event.extendedProps.invoice ? _event.extendedProps.invoice.payment_date : '',
+                sent: _event.extendedProps.invoice ? _event.extendedProps.invoice.sent : false,
+                paid: _event.extendedProps.invoice ? _event.extendedProps.invoice.paid : false,
+            }
+        }
+    }
+
 }
 
-export const formatDate = (date) => {
-    let d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}
-
-export const changeTZ = (date, timeZoneFrom, timeZoneTo) => {
-
-    let date_ = moment.tz(date, timeZoneFrom)
-
-    return moment.tz(date_, timeZoneTo).format()
-
-}
-
-export const capitalizeFirstLetter = (word) => {
-
-    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-
-}
+export default Utils; 
