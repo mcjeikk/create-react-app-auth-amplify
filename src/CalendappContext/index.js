@@ -8,6 +8,12 @@ class CalendappContextProvider extends Component {
 
     // Context state
     state = {
+
+        user : {
+            username : '',
+            email : ''
+        },
+
         events: [],
         showModal: false,
         showModalConfirmDelete: false,
@@ -42,7 +48,9 @@ class CalendappContextProvider extends Component {
 
         autocompleteClients: [],
         autocompleteCourses: [],
-        autocompleteCountries: []
+        autocompleteCountries: [],
+
+        areHiddenEvents: false,
 
     }
 
@@ -51,12 +59,21 @@ class CalendappContextProvider extends Component {
 
 
     // Method to update state
+
+    setUser = (user) => {
+        this.setState((prevState) => ({ user }))
+    }
+
     setEvent = (event) => {
         this.setState((prevState) => ({ event }))
     }
 
     setEvents = (events) => {
         this.setState((prevState) => ({ events }))
+    }
+
+    setAreHiddenEvents = (areHiddenEvents) => {
+        this.setState((prevState) => ({ areHiddenEvents }))
     }
 
     setAutocompleteClients = (autocompleteClients) => {
@@ -90,14 +107,16 @@ class CalendappContextProvider extends Component {
             actionEvent, showModalConfirmDelete,
             autocompleteClients,
             autocompleteCourses,
-            autocompleteCountries
+            autocompleteCountries,
+            areHiddenEvents, user
         } = this.state
         const { setEvent, setShowModal,
             setActionEvent, setShowModalConfirmDelete,
             setEvents,
             setAutocompleteClients,
             setAutocompleteCourses,
-            setAutocompleteCountries
+            setAutocompleteCountries,
+            setAreHiddenEvents, setUser
         } = this
 
         return (
@@ -110,6 +129,8 @@ class CalendappContextProvider extends Component {
                 setAutocompleteClients, autocompleteClients,
                 setAutocompleteCourses, autocompleteCourses,
                 setAutocompleteCountries, autocompleteCountries,
+                areHiddenEvents, setAreHiddenEvents,
+                user, setUser
 
             }}>
                 {children}

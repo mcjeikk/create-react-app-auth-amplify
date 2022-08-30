@@ -39,7 +39,7 @@ class Utils {
 
         let data = await response.json();
 
-        let dateToday = new Date()
+        let dateToday = moment()
 
         data.forEach(element => {
 
@@ -49,19 +49,38 @@ class Utils {
             element.start = startDateLocal.substring(0, 16);
             element.end = endDateLocal.substring(0, 16);
 
-            if (element.invoice && !element.invoice.paid && dateToday > new Date(element.invoice.payment_date)) {
+            if (element.invoice && !element.invoice.paid && moment(element.invoice.payment_date).isBefore(dateToday)) {
                 element.color = '#E74C3C'
-            } else if (new Date(element.end) >= dateToday) {
+            } else if (element.invoice && !element.invoice.paid && moment(element.end).isBefore(dateToday)) {
+                element.color = '#ef877c'
+            } else if (moment(element.start).isAfter(dateToday)) {
                 //Future events
                 element.color = '#3688D8'
-            } else if (new Date(element.end) < dateToday) {
+            } else if (moment(element.start).isBefore(dateToday)) {
                 //past event
                 element.color = '#87B0D9'
             }
 
         });
-
+        console.log(data);
         return data;
+
+    }
+
+    static hideEvents = (events) => {
+
+        events.forEach(element => {
+
+            element.display = 'background'
+            element.allDay = true
+            element.backgroundColor = '#a8acc9'
+            element.title = ''
+            element.start = moment(element.start).startOf('week').format()
+            element.end = moment(element.start).endOf('week').add(1, 'days').format()
+
+        });
+
+        return events
 
     }
 
@@ -212,7 +231,10 @@ class Utils {
 
     static capitalizeFirstLetter = (word) => {
 
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        if (word !== undefined && word.length > 0) {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        }
+
 
     }
 
@@ -338,6 +360,8 @@ class Utils {
             }
         }
     }
+
+
 
 }
 

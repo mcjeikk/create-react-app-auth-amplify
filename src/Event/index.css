@@ -300,6 +300,10 @@ label {
     transform: translateX(0.2rem);
 }
 
+.fc .fc-bg-event {
+    opacity: 1;
+}
+
 .ModalDeleteConfirmation {
     position: absolute;
     background: none;
@@ -315,12 +319,16 @@ label {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 700px) {
 
     .ModalDeleteConfirmation {
         margin: 0 20% !important;
     }
 }
 
+@media (min-width: 1000px) {
 
-
+    .ModalDeleteConfirmation {
+        margin: 0 30% !important;
+    }
+}

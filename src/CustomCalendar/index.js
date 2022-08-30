@@ -14,11 +14,9 @@ class CustomCalendar extends Component {
 
     static contextType = CalendappContext
 
-    static user_email = null
-
     constructor(props) {
         super(props)
-        this.user_email = props.user.attributes.email
+        this.user = props.user
         this.myRefCalendar = React.createRef();
     }
 
@@ -31,8 +29,10 @@ class CustomCalendar extends Component {
 
         let { event, events, showModal,
             setShowModal, setActionEvent,
-            setEvent, setEvents
+            setEvent, setEvents, setAreHiddenEvents, areHiddenEvents, user, setUser
         } = this.context
+
+
 
         const handleDateClick = (props) => {
             setActionEvent('create');
@@ -46,7 +46,7 @@ class CustomCalendar extends Component {
         }
 
         const handleEventClick = (props) => {
-
+            console.log(props);
             setActionEvent('edit');
             let event = Utils.translateEvent(props.event)
             setEvent(event);
@@ -61,8 +61,8 @@ class CustomCalendar extends Component {
                 // height: 'inherit',
                 border: 'none',
                 // resize: 'both',
-                background : 'none',
-                
+                background: 'none',
+
                 // width: '100%',
                 // marginLeft: "1rem",
                 // marginRight: "1rem",
@@ -78,13 +78,18 @@ class CustomCalendar extends Component {
 
         const getEvents_ = async () => {
 
-            event.user_email = this.user_email
+            let user = {
+                "email": this.user.attributes.email,
+                "name": this.username
+            }
+
+            setUser(user);
+
+            event.user_email = this.user.attributes.email
             setEvent(event)
 
             let today = new Date()
-
-            let evs = await Utils.getEvents(this.user_email, Utils.formatDate(today.addDays(-365)), Utils.formatDate(today.addDays(+365)))
-
+            let evs = await Utils.getEvents(this.user.attributes.email, Utils.formatDate(today.addDays(-365)), Utils.formatDate(today.addDays(+365)))
             setEvents(evs)
 
         }
@@ -110,11 +115,25 @@ class CustomCalendar extends Component {
 
         }
 
+        const onClickHideEvents = async (props) => {
+            props.preventDefault()
+
+            if (areHiddenEvents) {
+                getEvents_()
+                setAreHiddenEvents(false)
+            } else {
+                let evs = [...Utils.hideEvents(events)]
+                setEvents(evs)
+                setAreHiddenEvents(true)
+            }
+
+
+
+        }
+
         return (
 
             <div className="Calendar" >
-
-                {/* <button onClick={buttonCLic}>asdasdsad</button> */}
 
                 <FullCalendar
                     ref={this.myRefCalendar}
@@ -146,6 +165,8 @@ class CustomCalendar extends Component {
                         }
                     }
                 />
+
+                <button className={'buttonHideEvents'} onClick={onClickHideEvents}>{areHiddenEvents ? "Show events" : "Hide Events"}</button>
 
                 {
                     // console.log(events.filter(element => element.invoice))

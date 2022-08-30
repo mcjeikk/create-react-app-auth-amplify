@@ -346,7 +346,6 @@ class AddEvent extends Component {
 
         }
 
-
         const onClickEdit = async (_event) => {
             _event.preventDefault()
 
@@ -385,7 +384,6 @@ class AddEvent extends Component {
             Utils.moveUp()
 
         }
-
 
         const onClickCreate = async (_event) => {
             _event.preventDefault()

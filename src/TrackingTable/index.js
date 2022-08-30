@@ -4,8 +4,6 @@ import 'antd/dist/antd.css';
 import './index.css'
 import CalendappContext from '../CalendappContext';
 import Utils from '../Utils'
-import Modal from 'react-modal';
-import Event from '../Event';
 import moment from 'moment-timezone';
 
 class TrackingTable extends Component {
@@ -20,7 +18,7 @@ class TrackingTable extends Component {
 
     render() {
 
-        let { events, showModal, setEvent, event, setShowModal, setActionEvent } = this.context
+        let { events, setEvent, setShowModal, setActionEvent } = this.context
 
         const dateToday = moment()
 
