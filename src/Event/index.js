@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 import { MdDangerous, MdAutoFixHigh } from 'react-icons/md'
 import { Collapse, AutoComplete, Input } from 'antd';
 import Utils from '../Utils'
+import { CirclePicker } from 'react-color';
 
 
 const { Search } = Input;
@@ -42,6 +43,7 @@ class AddEvent extends Component {
         event.timezone = ''
         event.title = ''
         event.notes = ''
+        event.color = ''
         event.client.name = ''
         event.client.course = ''
         event.invoice.id_invoice = ''
@@ -59,6 +61,8 @@ class AddEvent extends Component {
     }
 
     render() {
+
+        let colors = ["#E74C3C", "#ef877c", "#9c27b0", "#673ab7", "#3f51b5", "#3688D8", "#87B0D9", "#00bcd4", "#009688", "#4caf50", "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800"]
 
         let { setShowModal, actionEvent,
             showModalConfirmDelete, setShowModalConfirmDelete,
@@ -117,6 +121,11 @@ class AddEvent extends Component {
 
         const onChangeNotes = (_event) => {
             event.notes = _event.target.value
+            setEvent(event)
+        }
+
+        const onChangeColors = (_event) => {
+            event.color = _event.hex
             setEvent(event)
         }
 
@@ -502,7 +511,10 @@ class AddEvent extends Component {
                     <label htmlFor={'notes'} >Notes</label>
                     <textarea name={"notes"} id={'notes'} rows="4" placeholder={"Event Notes"} value={event.notes} onChange={onChangeNotes}></textarea>
 
-                    <Collapse accordion defaultActiveKey={['1']} destroyInactivePanel={true} className={'CollapseCustom'}>
+                    <label htmlFor={'color'} >Color</label>
+                    <CirclePicker width={'auto'} colors={colors} color={event.color} onChangeComplete={onChangeColors}/>
+
+                    <Collapse accordion defaultActiveKey={['1']} destroyInactivePanel={true} className={'CollapseCustom'} >
                         <Panel header="Client" key="1">
                             <label htmlFor={'client'}>Client</label>
                             {/* <input name={"client"} type={"text"} placeholder={"Client"} value={event.client.name} onChange={onChangeClient}></input> */}

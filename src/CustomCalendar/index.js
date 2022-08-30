@@ -46,34 +46,12 @@ class CustomCalendar extends Component {
         }
 
         const handleEventClick = (props) => {
-            console.log(props);
             setActionEvent('edit');
             let event = Utils.translateEvent(props.event)
             setEvent(event);
             setShowModal(true)
         }
 
-
-
-        const customStyles = {
-            content: {
-                top: '2rem',
-                // height: 'inherit',
-                border: 'none',
-                // resize: 'both',
-                background: 'none',
-
-                // width: '100%',
-                // marginLeft: "1rem",
-                // marginRight: "1rem",
-                left: '1rem',
-                right: '1rem',
-                bottom: '4rem',
-                padding: '0',
-                // marginRight: '-50%',
-                // transform: 'translate(-50%, -50%)',
-            }
-        }
 
 
         const getEvents_ = async () => {
@@ -87,6 +65,7 @@ class CustomCalendar extends Component {
 
             event.user_email = this.user.attributes.email
             setEvent(event)
+
 
             let today = new Date()
             let evs = await Utils.getEvents(this.user.attributes.email, Utils.formatDate(today.addDays(-365)), Utils.formatDate(today.addDays(+365)))
@@ -105,11 +84,10 @@ class CustomCalendar extends Component {
         }
 
         const eventContent = (props) => {
-            // console.log(props);
             return (
                 <div style={{ padding: '0.2rem 0.2rem 0.2rem 0' }}>
-                    <span style={{ marginRight: '0.2rem', fontWeight: 'bold' }}>{props.timeText}</span>
-                    <span style={{}} >{Utils.capitalizeFirstLetter(props.event.title)}</span>
+                    <span style={{ marginRight: '0.2rem', fontWeight: 'bold' }}>{moment(props.event.start).format('HH:mm') + '-' + moment(props.event.end).format('HH:mm')}</span>
+                    <span>{Utils.capitalizeFirstLetter(props.event.title)}</span>
                 </div>
             )
 
@@ -166,7 +144,7 @@ class CustomCalendar extends Component {
                     }
                 />
 
-                <button className={'buttonHideEvents'} onClick={onClickHideEvents}>{areHiddenEvents ? "Show events" : "Hide Events"}</button>
+                {/* <button className={'buttonHideEvents'} onClick={onClickHideEvents}>{areHiddenEvents ? "Show events" : "Hide Events"}</button> */}
 
                 {
                     // console.log(events.filter(element => element.invoice))

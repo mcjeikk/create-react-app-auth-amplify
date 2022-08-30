@@ -28,6 +28,7 @@ class CalendappContextProvider extends Component {
             total_hours: '',
             title: '',
             notes: '',
+            color: '',
             client: {
                 name: '',
                 course: '',

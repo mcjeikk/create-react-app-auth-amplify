@@ -49,20 +49,20 @@ class Utils {
             element.start = startDateLocal.substring(0, 16);
             element.end = endDateLocal.substring(0, 16);
 
+            
             if (element.invoice && !element.invoice.paid && moment(element.invoice.payment_date).isBefore(dateToday)) {
                 element.color = '#E74C3C'
             } else if (element.invoice && !element.invoice.paid && moment(element.end).isBefore(dateToday)) {
                 element.color = '#ef877c'
-            } else if (moment(element.start).isAfter(dateToday)) {
-                //Future events
-                element.color = '#3688D8'
-            } else if (moment(element.start).isBefore(dateToday)) {
+            } else if (moment(element.end).isBefore(dateToday)) {
                 //past event
                 element.color = '#87B0D9'
-            }
+            } else if (!element.color && moment(element.end).isAfter(dateToday)) {
+                //Future events
+                element.color = '#3688D8'
+            } 
 
         });
-        console.log(data);
         return data;
 
     }
@@ -256,6 +256,7 @@ class Utils {
             total_hours: event.total_hours,
             title: event.title,
             notes: event.notes,
+            color: event.color,
         }
 
         if (event.id) {
@@ -343,6 +344,7 @@ class Utils {
             total_hours: _event.extendedProps.total_hours,
             title: _event.title,
             notes: _event.extendedProps.notes,
+            color: _event.backgroundColor,
             client: {
                 name: _event.extendedProps.client ? _event.extendedProps?.client.name : '',
                 course: _event.extendedProps.client ? _event.extendedProps?.client.course : '',
