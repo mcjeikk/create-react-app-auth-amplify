@@ -15,6 +15,7 @@
     cursor: pointer;
 
 }
+
 .Calendar a {
     color: black
 }
@@ -91,6 +92,15 @@
 }
 
 
+.HolidayClass {
+
+    /* background-image: linear-gradient(to right top, #76a4c2, #9fa9ce, #c4afce, #dfb8ca, #eec5c5); */
+    /* background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+            linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+            linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%); */
+    font-weight: bold;
+}
+
 @media (min-width: 600px) {
 
     .Calendar {
@@ -108,11 +118,11 @@
         padding-right: 10rem;
         padding-left: 10rem;
         transition: all 0.3s, visibility 0s;
-    
+
     }
 
     .ClassModalContainer {
-        
+
         padding: 0 20% !important;
         /* box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset; */
     }
@@ -129,7 +139,7 @@
         /* margin-right: 20%; */
         margin: 0 auto;
         transition: all 0.3s, visibility 0s;
-        
+
     }
 
     .Calendar .fc-scrollgrid-sync-table {
@@ -149,7 +159,7 @@
         /* margin-right: 20%; */
         margin: 0 10rem;
         transition: all 0.3s, visibility 0s;
-        
+
     }
 
     .Calendar .fc-scrollgrid-sync-table {
@@ -169,7 +179,7 @@
         /* margin-right: 20%; */
         margin: 0 30rem;
         transition: all 0.3s, visibility 0s;
-        
+
     }
 
     .Calendar .fc-scrollgrid-sync-table {

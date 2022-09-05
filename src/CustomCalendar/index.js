@@ -36,8 +36,15 @@ class CustomCalendar extends Component {
 
         const handleDateClick = (props) => {
             setActionEvent('create');
+            let selected_date  = ''
+            if (!props.hasOwnProperty('date')) {
+                console.log(props.event.start);
+                selected_date = Utils.formatDate(props.event.startStr)
+            } else {
 
-            let selected_date = Utils.formatDate(props.date.setDate(props.date.getDate()))
+                selected_date = Utils.formatDate(props.date.setDate(props.date.getDate()))
+            }
+
 
             event.start = selected_date + "T08:00"
             event.end = selected_date + "T17:00"
@@ -46,11 +53,20 @@ class CustomCalendar extends Component {
         }
 
         const handleEventClick = (props) => {
-            console.log(props);
-            setActionEvent('edit');
-            let event = Utils.translateEvent(props.event)
-            setEvent(event);
-            setShowModal(true)
+
+            if (props.event.extendedProps.isHoliday) {
+                console.log(props);
+                handleDateClick(props)
+
+            } else {
+                setActionEvent('edit');
+                let event = Utils.translateEvent(props.event)
+                setEvent(event);
+                setShowModal(true)
+
+            }
+
+
         }
 
 
@@ -106,12 +122,24 @@ class CustomCalendar extends Component {
 
         const eventContent = (props) => {
             // console.log(props);
-            return (
-                <div style={{ padding: '0.2rem 0.2rem 0.2rem 0' }}>
-                    <span style={{ marginRight: '0.2rem', fontWeight: 'bold' }}>{props.timeText}</span>
-                    <span style={{}} >{Utils.capitalizeFirstLetter(props.event.title)}</span>
-                </div>
-            )
+
+            if (props.event.extendedProps.isHoliday){
+                return (
+                    <div style={{ padding: '0.2rem 0.2rem 0.2rem 0' }}>
+                        <span style={{}} >{Utils.capitalizeFirstLetter(props.event.title)}</span>
+                    </div>
+                )
+            }   else {
+                return (
+                    <div style={{ padding: '0.2rem 0.2rem 0.2rem 0' }}>
+                        <span style={{ marginRight: '0.2rem', fontWeight: 'bold' }}>{props.timeText}</span>
+                        <span style={{}} >{Utils.capitalizeFirstLetter(props.event.title)}</span>
+                    </div>
+                )
+            }
+
+
+            
 
         }
 
@@ -138,6 +166,7 @@ class CustomCalendar extends Component {
                 <FullCalendar
                     ref={this.myRefCalendar}
                     locale={'en'}
+                    // defaultAllDay={true}
                     fixedWeekCount={false}
                     initialView='dayGridMonth'
                     eventDrop={eventDropMethod}
@@ -166,7 +195,7 @@ class CustomCalendar extends Component {
                     }
                 />
 
-                <button className={'buttonHideEvents'} onClick={onClickHideEvents}>{areHiddenEvents ? "Show events" : "Hide Events"}</button>
+                {/* <button className={'buttonHideEvents'} onClick={onClickHideEvents}>{areHiddenEvents ? "Show events" : "Hide Events"}</button> */}
 
                 {
                     // console.log(events.filter(element => element.invoice))

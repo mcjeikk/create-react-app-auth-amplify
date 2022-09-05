@@ -43,26 +43,51 @@ class Utils {
 
         data.forEach(element => {
 
-            let startDateLocal = this.changeTZ(element.start, element.timezone, moment.tz.guess())
-            let endDateLocal = this.changeTZ(element.end, element.timezone, moment.tz.guess())
+            if (element.isHoliday) {
 
-            element.start = startDateLocal.substring(0, 16);
-            element.end = endDateLocal.substring(0, 16);
+                if (element.timezone === 'America/Bogota'){
+                    element.title = element.title + " Colombia"
+                }   else if (element.timezone === 'Europe/Madrid') {
+                    element.title = element.title + " Spain"
+                }
 
-            if (element.invoice && !element.invoice.paid && moment(element.invoice.payment_date).isBefore(dateToday)) {
-                element.color = '#E74C3C'
-            } else if (element.invoice && !element.invoice.paid && moment(element.end).isBefore(dateToday)) {
-                element.color = '#ef877c'
-            } else if (moment(element.start).isAfter(dateToday)) {
-                //Future events
-                element.color = '#3688D8'
-            } else if (moment(element.start).isBefore(dateToday)) {
-                //past event
-                element.color = '#87B0D9'
+                element.classNames = ['HolidayClass']
+                // element.backgroundColor = '#FFFFE0'
+                element.color = '#FFFFE0'
+                // element.display = 'background'
+                // element.allDay = true
+                element.textColor = 'black'
+
+                // console.log(element);
+
+            } else {
+
+
+                let startDateLocal = this.changeTZ(element.start, element.timezone, moment.tz.guess())
+                let endDateLocal = this.changeTZ(element.end, element.timezone, moment.tz.guess())
+
+                element.start = startDateLocal.substring(0, 16);
+                element.end = endDateLocal.substring(0, 16);
+
+
+
+                if (element.invoice && !element.invoice.paid && moment(element.invoice.payment_date).isBefore(dateToday)) {
+                    element.color = '#E74C3C'
+                } else if (element.invoice && !element.invoice.paid && moment(element.end).isBefore(dateToday)) {
+                    element.color = '#ef877c'
+                } else if (moment(element.start).isAfter(dateToday)) {
+                    //Future events
+                    element.color = '#3688D8'
+                } else if (moment(element.start).isBefore(dateToday)) {
+                    //past event
+                    element.color = '#87B0D9'
+                }
+
             }
 
+
         });
-        console.log(data);
+        // console.log(data);
         return data;
 
     }

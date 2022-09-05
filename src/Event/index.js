@@ -167,7 +167,7 @@ class AddEvent extends Component {
 
                     setEvent(event)
 
-                    console.log(Number.isInteger(last_id));
+                    // console.log(Number.isInteger(last_id));
 
                 } else if (invoices_with_numbers.length > 0) {
 
@@ -180,7 +180,7 @@ class AddEvent extends Component {
 
                     setEvent(event)
 
-                    console.log(Number.isInteger(last_id));
+                    // console.log(Number.isInteger(last_id));
 
                 }
 
