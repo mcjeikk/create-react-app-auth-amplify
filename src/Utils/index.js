@@ -68,7 +68,8 @@ class Utils {
 
                 element.start = startDateLocal.substring(0, 16);
                 element.end = endDateLocal.substring(0, 16);
-
+            
+            }
             
             if (element.invoice && !element.invoice.paid && moment(element.invoice.payment_date).isBefore(dateToday)) {
                 element.color = '#E74C3C'
@@ -83,6 +84,9 @@ class Utils {
             } 
 
         });
+
+        
+
         return data;
 
     }
