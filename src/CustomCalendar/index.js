@@ -69,29 +69,6 @@ class CustomCalendar extends Component {
 
         }
 
-
-
-        const customStyles = {
-            content: {
-                top: '2rem',
-                // height: 'inherit',
-                border: 'none',
-                // resize: 'both',
-                background: 'none',
-
-                // width: '100%',
-                // marginLeft: "1rem",
-                // marginRight: "1rem",
-                left: '1rem',
-                right: '1rem',
-                bottom: '4rem',
-                padding: '0',
-                // marginRight: '-50%',
-                // transform: 'translate(-50%, -50%)',
-            }
-        }
-
-
         const getEvents_ = async () => {
 
             let user = {
@@ -103,6 +80,7 @@ class CustomCalendar extends Component {
 
             event.user_email = this.user.attributes.email
             setEvent(event)
+
 
             let today = new Date()
             let evs = await Utils.getEvents(this.user.attributes.email, Utils.formatDate(today.addDays(-365)), Utils.formatDate(today.addDays(+365)))
