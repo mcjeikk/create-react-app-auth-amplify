@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './index.css'
 import CalendappContext from '../CalendappContext';
 import Modal from 'react-modal';
-import { MdDangerous, MdAutoFixHigh } from 'react-icons/md'
+import { MdDangerous } from 'react-icons/md'
 import { Collapse, AutoComplete, Input } from 'antd';
 import Utils from '../Utils'
 import { CirclePicker } from 'react-color';
@@ -512,7 +512,7 @@ class AddEvent extends Component {
                     <textarea name={"notes"} id={'notes'} rows="4" placeholder={"Event Notes"} value={event.notes} onChange={onChangeNotes}></textarea>
 
                     <label htmlFor={'color'} >Color</label>
-                    <CirclePicker width={'auto'} colors={colors} color={event.color} onChangeComplete={onChangeColors}/>
+                    <CirclePicker width={'auto'} colors={colors} color={event.color} onChangeComplete={onChangeColors} />
 
                     <Collapse accordion defaultActiveKey={['1']} destroyInactivePanel={true} className={'CollapseCustom'} >
                         <Panel header="Client" key="1">
