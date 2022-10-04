@@ -36,7 +36,7 @@ class CustomCalendar extends Component {
 
         const handleDateClick = (props) => {
             setActionEvent('create');
-            let selected_date  = ''
+            let selected_date = ''
             if (!props.hasOwnProperty('date')) {
                 console.log(props.event.start);
                 selected_date = Utils.formatDate(props.event.startStr)
@@ -44,8 +44,6 @@ class CustomCalendar extends Component {
 
                 selected_date = Utils.formatDate(props.date.setDate(props.date.getDate()))
             }
-
-
             event.start = selected_date + "T08:00"
             event.end = selected_date + "T17:00"
             setEvent(event)
@@ -101,23 +99,24 @@ class CustomCalendar extends Component {
         const eventContent = (props) => {
             // console.log(props);
 
-            if (props.event.extendedProps.isHoliday){
+            if (props.event.extendedProps.isHoliday) {
                 return (
                     <div style={{ padding: '0.2rem 0.2rem 0.2rem 0' }}>
                         <span style={{}} >{Utils.capitalizeFirstLetter(props.event.title)}</span>
                     </div>
                 )
-            }   else {
+            } else {
+                // console.log(props);
                 return (
                     <div style={{ padding: '0.2rem 0.2rem 0.2rem 0' }}>
-                        <span style={{ marginRight: '0.2rem', fontWeight: 'bold' }}>{props.timeText}</span>
-                        <span style={{}} >{Utils.capitalizeFirstLetter(props.event.title)}</span>
+                        <span style={{ marginRight: '0.2rem', fontWeight: 'bold' }}>{moment(props.event.start).format('HH:mm') + '-' + moment(props.event.end).format('HH:mm')}</span>
+                        <span>{Utils.capitalizeFirstLetter(props.event.title)}</span>
                     </div>
                 )
             }
 
 
-            
+
 
         }
 
@@ -168,7 +167,7 @@ class CustomCalendar extends Component {
                         {
                             "hour": '2-digit',
                             "minute": '2-digit',
-                            "meridiem": "narrow" //Normally with a 12-hour clock the meridiem displays as A.M./P.M.
+                            "meridiem": false// "narrow" //Normally with a 12-hour clock the meridiem displays as A.M./P.M.
                         }
                     }
                 />

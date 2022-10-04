@@ -250,11 +250,11 @@ class TrackingTable extends Component {
 
                             months.forEach(month => {
 
-                                let totalMonth = invoices.map(element => moment(element.invoice.payment_date).format('MMMM') === month ? element.invoice.total_invoice : 0)
+                                let totalMonth = invoices.map(element => moment(element.invoice.payment_date).format('MMMM') === month ? parseInt(element.invoice.total_invoice) : 0)
 
-                                totalMonth = totalMonth.reduce((accumulator, currentValue) => {
+                                totalMonth = parseInt(totalMonth.reduce((accumulator, currentValue) => {
                                     return accumulator + currentValue
-                                });
+                                }));
 
                                 let info = {
                                     month,

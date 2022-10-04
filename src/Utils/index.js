@@ -164,6 +164,8 @@ class Utils {
 
         let item = this.buildEvent(event)
 
+        console.log(event);
+
         let bodyContent = JSON.stringify(item);
 
         let response = null

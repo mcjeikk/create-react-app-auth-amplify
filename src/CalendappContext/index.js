@@ -55,10 +55,6 @@ class CalendappContextProvider extends Component {
 
     }
 
-
-
-
-
     // Method to update state
 
     setUser = (user) => {
@@ -132,7 +128,6 @@ class CalendappContextProvider extends Component {
                 setAutocompleteCountries, autocompleteCountries,
                 areHiddenEvents, setAreHiddenEvents,
                 user, setUser
-
             }}>
                 {children}
             </CalendappContext.Provider>
