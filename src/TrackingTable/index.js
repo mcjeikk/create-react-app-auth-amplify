@@ -26,6 +26,10 @@ class TrackingTable extends Component {
 
             let ev = events.filter(element => element.id === event.id)[0]
 
+            console.log(ev);
+
+            ev = Utils.translateEventByInvoice(ev)
+
             setEvent(ev);
 
             let cal = this.reference.current.getApi()
@@ -122,7 +126,7 @@ class TrackingTable extends Component {
                     return record.title.toUpperCase()
                 },
             },
-            
+
 
         ];
 
@@ -210,7 +214,7 @@ class TrackingTable extends Component {
                     return record.title.toUpperCase()
                 },
             },
-            
+
 
         ];
 
@@ -242,15 +246,15 @@ class TrackingTable extends Component {
                             let invoices = events.filter(element => element.invoice && !element.invoice.paid)
 
                             let months = invoices.map(element => moment(element.invoice.payment_date).format())
-                            
+
                             months = months.sort();
 
                             //get unique months
-                            months = [...new Set(months.map(element => moment(element).format('MMMM')))]
+                            months = [...new Set(months.map(element => moment(element).format('MMMM YYYY')))]
 
                             months.forEach(month => {
 
-                                let totalMonth = invoices.map(element => moment(element.invoice.payment_date).format('MMMM') === month ? parseInt(element.invoice.total_invoice) : 0)
+                                let totalMonth = invoices.map(element => moment(element.invoice.payment_date).format('MMMM YYYY') === month ? parseInt(element.invoice.total_invoice) : 0)
 
                                 totalMonth = parseInt(totalMonth.reduce((accumulator, currentValue) => {
                                     return accumulator + currentValue
@@ -277,6 +281,8 @@ class TrackingTable extends Component {
 
 
                             });
+
+
 
                             return (
                                 <Table.Summary fixed>
@@ -313,15 +319,15 @@ class TrackingTable extends Component {
                             let invoices = events.filter(element => element.invoice && element.invoice.paid)
 
                             let months = invoices.map(element => moment(element.invoice.payment_date).format())
-                            
+
                             months = months.sort();
 
                             //get unique months
-                            months = [...new Set(months.map(element => moment(element).format('MMMM')))]
+                            months = [...new Set(months.map(element => moment(element).format('MMMM YYYY')))]
 
                             months.forEach(month => {
 
-                                let totalMonth = invoices.map(element => moment(element.invoice.payment_date).format('MMMM') === month ? parseInt(element.invoice.total_invoice) : 0)
+                                let totalMonth = invoices.map(element => moment(element.invoice.payment_date).format('MMMM YYYY') === month ? parseInt(element.invoice.total_invoice) : 0)
 
                                 totalMonth = totalMonth.reduce((accumulator, currentValue) => {
                                     return accumulator + currentValue
@@ -349,15 +355,36 @@ class TrackingTable extends Component {
 
                             });
 
+                            const a = [...new Set(rows.map((row) => row.key.split(" ")[1]))]
+
                             return (
                                 <Table.Summary fixed>
 
                                     {rows}
 
-                                    <Table.Summary.Row>
-                                        <Table.Summary.Cell index={0}><b>Summary</b></Table.Summary.Cell>
+                                    {a.map((year) => {
+
+                                        let totalYear = summary.filter((element) => element.month.split(" ")[1] === year)
+
+                                        totalYear = totalYear.map((element) => element.totalMonth)
+
+                                        totalYear = totalYear.reduce((accumulator, currentValue) => {
+                                            return accumulator + currentValue
+                                        });
+
+                                        return (<Table.Summary.Row key={year}>
+                                            <Table.Summary.Cell index={0}><b>Summary {year}</b></Table.Summary.Cell>
+                                            <Table.Summary.Cell index={4}><b>{Utils.formatUSD(totalYear)}</b></Table.Summary.Cell>
+                                        </Table.Summary.Row>)
+
+                                    })}
+
+                                    <Table.Summary.Row >
+                                        <Table.Summary.Cell index={0}><b>Total</b></Table.Summary.Cell>
                                         <Table.Summary.Cell index={4}><b>{Utils.formatUSD(totalInvoices)}</b></Table.Summary.Cell>
                                     </Table.Summary.Row>
+
+
                                 </Table.Summary>
 
                             )

@@ -17,6 +17,10 @@ class AddEvent extends Component {
 
     componentDidMount() {
 
+        document.onkeydown = function (e) {
+            return (e.key.toUpperCase() === 'ESCAPE') ? false : true
+        }
+
         let { event, events,
             setEvent, actionEvent,
             setAutocompleteClients,
@@ -34,7 +38,6 @@ class AddEvent extends Component {
         }
 
     }
-
 
     clearEventForm() {
 
@@ -71,6 +74,15 @@ class AddEvent extends Component {
             setAutocompleteCourses, autocompleteCourses,
             setAutocompleteCountries, autocompleteCountries,
         } = this.context
+
+        const onKeyScape = (event) => {
+
+            if (event.key.toUpperCase() === 'ESCAPE') {
+                onClickCancel(event)
+            }
+
+
+        }
 
         const onClickCancel = (_event) => {
             _event.preventDefault()
@@ -472,7 +484,7 @@ class AddEvent extends Component {
 
         return (
 
-            <main className='MainContainerEvent' >
+            <main className='MainContainerEvent' onKeyDown={onKeyScape}>
 
                 {actionEvent === 'edit' && (
                     <h2>Edit Event</h2>
@@ -503,7 +515,7 @@ class AddEvent extends Component {
                     <input required={true} id={'to'} name={"end"} type={"datetime-local"} value={event.end} onChange={onChangeTo} onBlur={onBlurDates}></input>
 
                     <label htmlFor={'total_hours'}>Total Hours</label>
-                    <input required={true} id={'total_hours'} name={"total_hours"} type={"number"} placeholder={"Total Hours"} value={event.total_hours} onChange={onChangeTotalHours}></input>
+                    <input required={true} autoFocus={true} id={'total_hours'} name={"total_hours"} type={"number"} placeholder={"Total Hours"} value={event.total_hours} onChange={onChangeTotalHours}></input>
 
                     <label htmlFor={'title'}>Title</label>
                     <input name={"title"} id={'title'} type={"text"} placeholder={"Event Title"} required={true} value={event.title} onChange={onChangeTitle}></input>
@@ -616,9 +628,10 @@ class AddEvent extends Component {
                     isOpen={showModalConfirmDelete}
                     style={customStyles}
                     ariaHideApp={false}
-                    className={'ModalDeleteConfirmation'}>
+                    className={'ModalDeleteConfirmation'}
+                >
 
-                    <main className='ModalContainerConfirmDelete'>
+                    <main className='ModalContainerConfirmDelete' >
 
                         <div className='ModalMessageConfirmation'>
                             <MdDangerous className='IconDanger' />

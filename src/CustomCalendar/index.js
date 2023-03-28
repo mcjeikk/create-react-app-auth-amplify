@@ -106,11 +106,16 @@ class CustomCalendar extends Component {
                     </div>
                 )
             } else {
-                // console.log(props);
                 return (
                     <div style={{ padding: '0.2rem 0.2rem 0.2rem 0' }}>
                         <span style={{ marginRight: '0.2rem', fontWeight: 'bold' }}>{moment(props.event.start).format('HH:mm') + '-' + moment(props.event.end).format('HH:mm')}</span>
                         <span>{Utils.capitalizeFirstLetter(props.event.title)}</span>
+
+                        {props.event.extendedProps?.invoice?.id_invoice
+                            && <span>{": " + props.event.extendedProps?.invoice?.id_invoice}</span>
+                        }
+
+
                     </div>
                 )
             }
@@ -186,6 +191,7 @@ class CustomCalendar extends Component {
                 <Modal
                     className={'ClassModalContainer'}
                     isOpen={showModal}
+                    shouldCloseOnEsc={true}
                     // style={customStyles}
                     ariaHideApp={false}>
                     <Event />

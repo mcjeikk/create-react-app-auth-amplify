@@ -45,9 +45,9 @@ class Utils {
 
             if (element.isHoliday) {
 
-                if (element.timezone === 'America/Bogota'){
+                if (element.timezone === 'America/Bogota') {
                     element.title = element.title + " Colombia"
-                }   else if (element.timezone === 'Europe/Madrid') {
+                } else if (element.timezone === 'Europe/Madrid') {
                     element.title = element.title + " Spain"
                 }
 
@@ -68,9 +68,9 @@ class Utils {
 
                 element.start = startDateLocal.substring(0, 16);
                 element.end = endDateLocal.substring(0, 16);
-            
+
             }
-            
+
             if (element.invoice && !element.invoice.paid && moment(element.invoice.payment_date).isBefore(dateToday)) {
                 element.color = '#E74C3C'
             } else if (element.invoice && !element.invoice.paid && moment(element.end).isBefore(dateToday)) {
@@ -81,11 +81,11 @@ class Utils {
             } else if (!element.color && moment(element.end).isAfter(dateToday)) {
                 //Future events
                 element.color = '#3688D8'
-            } 
+            }
 
         });
 
-        
+
 
         return data;
 
@@ -354,6 +354,40 @@ class Utils {
 
     static formatUSD = (number) => {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number)
+    }
+
+    static translateEventByInvoice = (_event) => {
+
+        let startDateLocal = Utils.changeTZ(_event.start, moment.tz.guess(), _event.timezone)
+        let endDateLocal = Utils.changeTZ(_event.end, moment.tz.guess(), _event.timezone)
+
+        return {
+            id: _event.id,
+            user_email: _event.user_email,
+            timezone: _event.timezone,
+            start: startDateLocal.substring(0, 16), //ex: 2022-08-10T09:00
+            end: endDateLocal.substring(0, 16), //ex: 2022-08-10T09:00
+            total_hours: _event.total_hours,
+            title: _event.title,
+            notes: _event.notes,
+            color: _event.color,
+            client: {
+                name: _event.client ? _event?.client.name : '',
+                course: _event.client ? _event?.client.course : '',
+            },
+            invoice: {
+                id_invoice: _event.invoice ? _event.invoice.id_invoice : '',
+                country: _event.invoice ? _event.invoice.country : '',
+                currency: _event.invoice ? _event.invoice.currency : '',
+                cost_per_hour: _event.invoice ? _event.invoice.cost_per_hour : '',
+                total_invoice: _event.invoice ? _event.invoice.total_invoice : '',
+                payment_cond_days: _event.invoice ? _event.invoice.payment_cond_days : '',
+                payment_date: _event.invoice ? _event.invoice.payment_date : '',
+                sent: _event.invoice ? _event.invoice.sent : false,
+                paid: _event.invoice ? _event.invoice.paid : false,
+            }
+        }
+
     }
 
     static translateEvent = (_event) => {
