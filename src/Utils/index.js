@@ -13,10 +13,10 @@ class Utils {
 
     static getEvents = async (user_email, dateFrom = new Date(), dateTo = new Date()) => {
 
-        if (typeof dateFrom === "object") {
-            dateFrom = this.formatDate(dateFrom.addDays(-365))
-            dateTo = this.formatDate(dateTo.addDays(+365))
-        }
+        // if (typeof dateFrom === "object") {
+        // dateFrom = this.formatDate(dateFrom.addDays(-365))
+        // dateTo = this.formatDate(dateTo.addDays(+365))
+        // }
 
         let headersList = {
             "Accept": "*/*",
@@ -25,11 +25,9 @@ class Utils {
 
         let bodyContent = JSON.stringify({
             "user_email": user_email,
-            "start": dateFrom + ' 00:00:00',
-            "end": dateTo + ' 00:00:00',
-            // "start": "2022-01-01 08:00:00",
-            // "end": "2022-12-31 08:00:00"
         });
+
+        console.log(bodyContent);
 
         let response = await fetch("https://c9ge3dujm1.execute-api.us-east-2.amazonaws.com/prod/search_events", {
             method: "POST",

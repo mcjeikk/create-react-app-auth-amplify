@@ -312,71 +312,73 @@ class TrackingTable extends Component {
                         dataSource={events.filter(element => element.invoice && element.invoice.paid)}
                         summary={() => {
 
-                            let summary = []
-                            let rows = []
+                            // Asumiendo que 'events' es el array de tus objetos JSON
+                            let invoices = events
+                                .filter(element => element.invoice && element.invoice.paid)
+                                .map(element => ({
+                                    ...element,
+                                    month: moment(element.invoice.payment_date).format('MMMM YYYY'),
+                                    monthNumber: moment(element.invoice.payment_date).month(), // Número de mes (0-11)
+                                    year: moment(element.invoice.payment_date).format('YYYY')
+                                }));
 
-                            let invoices = events.filter(element => element.invoice && element.invoice.paid)
-                                .map(element => ({ ...element, month: moment(element.invoice.payment_date).format('MMMM YYYY') }));
-
-                            console.log(invoices);
-
+                            // Calcula el total general
                             let totalInvoices = invoices.reduce((sum, item) => sum + parseFloat(item.invoice.total_invoice), 0);
 
-                            // Get unique months
-                            let uniqueMonths = [...new Set(invoices.map(item => item.month))];
-
-                            summary = uniqueMonths.map(month => {
-                                let totalMonth = invoices
-                                    .filter(item => item.month === month)
-                                    .reduce((sum, item) => sum + parseFloat(item.invoice.total_invoice), 0);
-                                return { month, totalMonth };
+                            // Ordenar por año y luego por mes
+                            invoices.sort((a, b) => {
+                                return a.year - b.year || a.monthNumber - b.monthNumber;
                             });
 
-                            summary.forEach(element => {
+                            // Agrupa y suma por mes
+                            let summaryByMonth = invoices.reduce((acc, item) => {
+                                let key = item.month;
+                                if (!acc[key]) {
+                                    acc[key] = 0;
+                                }
+                                acc[key] += parseFloat(item.invoice.total_invoice);
+                                return acc;
+                            }, {});
 
+                            // Agrupa y suma por año
+                            let summaryByYear = invoices.reduce((acc, item) => {
+                                let key = item.year;
+                                if (!acc[key]) {
+                                    acc[key] = 0;
+                                }
+                                acc[key] += parseFloat(item.invoice.total_invoice);
+                                return acc;
+                            }, {});
+
+                            // Creación de filas para el resumen
+                            let rows = Object.entries(summaryByMonth).map(([month, total]) => (
+                                <Table.Summary.Row key={month}>
+                                    <Table.Summary.Cell index={0}><b>{month}</b></Table.Summary.Cell>
+                                    <Table.Summary.Cell index={4}><b>{Utils.formatUSD(total)}</b></Table.Summary.Cell>
+                                </Table.Summary.Row>
+                            ));
+
+                            // Agregar filas de resumen anual
+                            Object.entries(summaryByYear).forEach(([year, total]) => {
                                 rows.push(
-                                    <Table.Summary.Row key={element['month']}>
-                                        <Table.Summary.Cell index={0}><b>{element['month']}</b></Table.Summary.Cell>
-                                        <Table.Summary.Cell index={4}><b>{Utils.formatUSD(element['totalMonth'])}</b></Table.Summary.Cell>
+                                    <Table.Summary.Row key={'year-' + year}>
+                                        <Table.Summary.Cell index={0}><b>Summary {year}</b></Table.Summary.Cell>
+                                        <Table.Summary.Cell index={4}><b>{Utils.formatUSD(total)}</b></Table.Summary.Cell>
                                     </Table.Summary.Row>
-                                )
-
-
+                                );
                             });
 
-                            const a = [...new Set(rows.map((row) => row.key.split(" ")[1]))]
+                            // Agregar fila de total general
+                            rows.push(
+                                <Table.Summary.Row key="total">
+                                    <Table.Summary.Cell index={0}><b>Total</b></Table.Summary.Cell>
+                                    <Table.Summary.Cell index={4}><b>{Utils.formatUSD(totalInvoices)}</b></Table.Summary.Cell>
+                                </Table.Summary.Row>
+                            );
 
                             return (
-                                <Table.Summary fixed>
-
-                                    {rows}
-
-                                    {a.map((year) => {
-
-                                        let totalYear = summary.filter((element) => element.month.split(" ")[1] === year)
-
-                                        totalYear = totalYear.map((element) => element.totalMonth)
-
-                                        totalYear = totalYear.reduce((accumulator, currentValue) => {
-                                            return accumulator + currentValue
-                                        });
-
-                                        return (<Table.Summary.Row key={year}>
-                                            <Table.Summary.Cell index={0}><b>Summary {year}</b></Table.Summary.Cell>
-                                            <Table.Summary.Cell index={4}><b>{Utils.formatUSD(totalYear)}</b></Table.Summary.Cell>
-                                        </Table.Summary.Row>)
-
-                                    })}
-
-                                    <Table.Summary.Row >
-                                        <Table.Summary.Cell index={0}><b>Total</b></Table.Summary.Cell>
-                                        <Table.Summary.Cell index={4}><b>{Utils.formatUSD(totalInvoices)}</b></Table.Summary.Cell>
-                                    </Table.Summary.Row>
-
-
-                                </Table.Summary>
-
-                            )
+                                <Table.Summary fixed>{rows}</Table.Summary>
+                            );
                         }}
                     />
 

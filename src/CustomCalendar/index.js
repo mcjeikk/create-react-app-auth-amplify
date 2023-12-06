@@ -81,7 +81,8 @@ class CustomCalendar extends Component {
 
 
             let today = new Date()
-            let evs = await Utils.getEvents(this.user.attributes.email, Utils.formatDate(today.addDays(-365)), Utils.formatDate(today.addDays(+365)))
+            // let evs = await Utils.getEvents(this.user.attributes.email, Utils.formatDate(today.addDays(-365)), Utils.formatDate(today.addDays(+365)))
+            let evs = await Utils.getEvents(this.user.attributes.email)
             setEvents(evs)
 
         }
