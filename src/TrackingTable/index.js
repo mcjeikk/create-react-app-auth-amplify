@@ -274,7 +274,7 @@ class TrackingTable extends Component {
 
                                 rows.push(
                                     <Table.Summary.Row key={element['month']}>
-                                        <Table.Summary.Cell index={0}><b>Total {element['month']}</b></Table.Summary.Cell>
+                                        <Table.Summary.Cell index={0}><b>{element['month']}</b></Table.Summary.Cell>
                                         <Table.Summary.Cell index={4}><b>{Utils.formatUSD(element['totalMonth'])}</b></Table.Summary.Cell>
                                     </Table.Summary.Row>
                                 )
@@ -290,7 +290,7 @@ class TrackingTable extends Component {
                                     {rows}
 
                                     <Table.Summary.Row>
-                                        <Table.Summary.Cell index={0}><b>Summary</b></Table.Summary.Cell>
+                                        <Table.Summary.Cell index={0}><b>Total</b></Table.Summary.Cell>
                                         <Table.Summary.Cell index={4}><b>{Utils.formatUSD(totalInvoices)}</b></Table.Summary.Cell>
                                     </Table.Summary.Row>
                                 </Table.Summary>
@@ -314,40 +314,29 @@ class TrackingTable extends Component {
 
                             let summary = []
                             let rows = []
-                            let totalInvoices = 0
 
                             let invoices = events.filter(element => element.invoice && element.invoice.paid)
+                                .map(element => ({ ...element, month: moment(element.invoice.payment_date).format('MMMM YYYY') }));
 
-                            let months = invoices.map(element => moment(element.invoice.payment_date).format())
+                            console.log(invoices);
 
-                            months = months.sort();
+                            let totalInvoices = invoices.reduce((sum, item) => sum + parseFloat(item.invoice.total_invoice), 0);
 
-                            //get unique months
-                            months = [...new Set(months.map(element => moment(element).format('MMMM YYYY')))]
+                            // Get unique months
+                            let uniqueMonths = [...new Set(invoices.map(item => item.month))];
 
-                            months.forEach(month => {
-
-                                let totalMonth = invoices.map(element => moment(element.invoice.payment_date).format('MMMM YYYY') === month ? parseInt(element.invoice.total_invoice) : 0)
-
-                                totalMonth = totalMonth.reduce((accumulator, currentValue) => {
-                                    return accumulator + currentValue
-                                });
-
-                                let info = {
-                                    month,
-                                    totalMonth
-                                }
-
-                                summary.push(info)
-                                totalInvoices += totalMonth
-
+                            summary = uniqueMonths.map(month => {
+                                let totalMonth = invoices
+                                    .filter(item => item.month === month)
+                                    .reduce((sum, item) => sum + parseFloat(item.invoice.total_invoice), 0);
+                                return { month, totalMonth };
                             });
 
                             summary.forEach(element => {
 
                                 rows.push(
                                     <Table.Summary.Row key={element['month']}>
-                                        <Table.Summary.Cell index={0}><b>Total {element['month']}</b></Table.Summary.Cell>
+                                        <Table.Summary.Cell index={0}><b>{element['month']}</b></Table.Summary.Cell>
                                         <Table.Summary.Cell index={4}><b>{Utils.formatUSD(element['totalMonth'])}</b></Table.Summary.Cell>
                                     </Table.Summary.Row>
                                 )

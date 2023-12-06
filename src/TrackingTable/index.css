@@ -38,7 +38,12 @@
 }
 
 .TableTacking .ant-table-cell{
-    padding: 1.3rem 1.6rem 1.6rem 1.3rem;
+    padding: 1rem ;
+    /* padding: 0; */
+}
+
+.ant-table-tbody  {
+    padding: 1rem ;
 }
 
 .TableTacking .ant-table-thead > tr > th {
